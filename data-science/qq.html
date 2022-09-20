@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sushovan Majhi">
+<meta name="dcterms.date" content="2022-09-20">
+
+<title>Quantile-Quantile Plots</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: 1;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>
+    .quarto-title-block .quarto-title-banner {
+      background-image: url(order.svg);
+background-size: cover;
+    }
+    </style>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.smajhi.com">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">Tutorials</a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Quantile-Quantile Plots</h1>
+            <p class="subtitle lead">Visualization builds intuitions – math makes them concrete</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Sushovan Majhi </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 20, 2022</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#quantiles" id="toc-quantiles" class="nav-link active" data-scroll-target="#quantiles">Quantiles</a>
+  <ul class="collapse">
+  <li><a href="#theoretical-quantiles" id="toc-theoretical-quantiles" class="nav-link" data-scroll-target="#theoretical-quantiles">Theoretical Quantiles</a></li>
+  <li><a href="#observed-quantiles" id="toc-observed-quantiles" class="nav-link" data-scroll-target="#observed-quantiles">Observed Quantiles</a></li>
+  </ul></li>
+  <li><a href="#plotting-and-studying-q-q-plots" id="toc-plotting-and-studying-q-q-plots" class="nav-link" data-scroll-target="#plotting-and-studying-q-q-plots">Plotting and Studying Q-Q Plots</a>
+  <ul class="collapse">
+  <li><a href="#observed-vs-theoretical-quantiles" id="toc-observed-vs-theoretical-quantiles" class="nav-link" data-scroll-target="#observed-vs-theoretical-quantiles">Observed vs Theoretical Quantiles</a>
+  <ul class="collapse">
+  <li><a href="#testing-uniform-random-generator" id="toc-testing-uniform-random-generator" class="nav-link" data-scroll-target="#testing-uniform-random-generator">Testing Uniform Random Generator</a></li>
+  </ul></li>
+  <li><a href="#two-observed-batches" id="toc-two-observed-batches" class="nav-link" data-scroll-target="#two-observed-batches">Two Observed Batches</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/sushovan4/tutorials/edit/main/data-science/qq.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/sushovan4/tutorials/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Quantile-Quantile plot (also known as Q-Q plot) is an extremely useful visual tool for exploratory data analysis (EDA). A Q-Q plot is not particularly a summary of data, rather an <em>informal</em> assessment of <a href="https://en.wikipedia.org/wiki/Goodness_of_fit">goodness of fit</a> to discern the disparity of two distributions. Quantiles from one distribution (usually from data) is plotted against those of another distribution (usually a theoretical, known model). For more examples and discussions, see <span class="citation" data-cites="wilk68">(<a href="#ref-wilk68" role="doc-biblioref">Wilk and Gnanadesikan 1968</a>)</span>.</p>
+<section id="quantiles" class="level1">
+<h1>Quantiles</h1>
+<p>Since the concept of a Q-Q plot is based on quantiles. We begin with the definition of quantiles of a probability distribution.</p>
+<section id="theoretical-quantiles" class="level2">
+<h2 class="anchored" data-anchor-id="theoretical-quantiles">Theoretical Quantiles</h2>
+<div id="def-quantile" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1 (Theoretical Quantiles) </strong></span></p>
+<p>For any <span class="math inline">\(p\in[0,1]\)</span>, a <span class="math inline">\(p\)</span>th <strong>quantile</strong> of a random variable <span class="math inline">\(X\)</span> is defined to be that value <span class="math inline">\(x_p\in\mathbb R\)</span> such that <span class="math inline">\(\mathbb P(X\leq x_p)=p\)</span>.</p>
+</div>
+<p>In other words, the probability that <span class="math inline">\(X\)</span> realizes a value not greater than a <span class="math inline">\(p\)</span>th quantile is <span class="math inline">\(p\)</span>. For <span class="math inline">\(p=\frac{1}{2}\)</span>, <span class="math inline">\(x_p\)</span> is commonly known as <strong>median</strong> of <span class="math inline">\(X\)</span>. If <span class="math inline">\(F(x)\)</span> denotes the CDF of <span class="math inline">\(X\)</span>, one notes that <span class="math inline">\(x_p=F^{-1}(p)\)</span>, provided the CDF <span class="math inline">\(F(x)\)</span> is <em>invertible</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> near <span class="math inline">\(x_p\)</span>.</p>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Quantiles are not unique
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In general, quantiles are not unique. Easy examples can be found when <span class="math inline">\(X\)</span> is discrete. For an example on the continuous side, take <span class="math inline">\(X\sim\mathrm{unif}([0,1])\)</span> to see that any number not less than <span class="math inline">\(1\)</span> is a <span class="math inline">\(p\)</span>th quantile for <span class="math inline">\(p=1\)</span>. See the CDF of <span class="math inline">\(X\)</span> below to convince yourself.</p>
+</div>
+</div>
+<div>
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="42" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 41;"><span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="dt">y</span><span class="op">:</span> {  <span class="dt">ticks</span><span class="op">:</span> <span class="dv">5</span> }<span class="op">,</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="dt">x</span><span class="op">:</span> { <span class="dt">ticks</span><span class="op">:</span> <span class="dv">3</span> }<span class="op">,</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="dt">style</span><span class="op">:</span> { <span class="dt">fontSize</span><span class="op">:</span> <span class="st">'1.2rem'</span> }<span class="op">,</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">line</span>([[<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">0</span>]<span class="op">,</span>[<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>]]<span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'steelblue'</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span> })<span class="op">,</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">line</span>([[<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span>[<span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]]<span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'steelblue'</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span> })<span class="op">,</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">line</span>([[<span class="dv">1</span><span class="op">,</span> <span class="dv">0</span>]<span class="op">,</span>[<span class="dv">2</span><span class="op">,</span> <span class="dv">0</span>]]<span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'steelblue'</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span> })<span class="op">,</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">line</span>([[<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">0</span>]<span class="op">,</span>[<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>]<span class="op">,</span>[<span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> [<span class="dv">2</span><span class="op">,</span> <span class="dv">1</span>]]<span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'steelblue'</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span> })<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="dt">y</span><span class="op">:</span> {  <span class="dt">ticks</span><span class="op">:</span> <span class="dv">5</span> }<span class="op">,</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="dt">x</span><span class="op">:</span> { <span class="dt">ticks</span><span class="op">:</span> <span class="dv">3</span> }<span class="op">,</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="dt">style</span><span class="op">:</span> { <span class="dt">fontSize</span><span class="op">:</span> <span class="st">'1.4rem'</span> }</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-ojs-cell-1" class="cell quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div id="fig-ojs-cell-1-1" class="quarto-figure quarto-figure-center anchored" style="flex-basis: 50.0%;justify-content: center;">
+<figure class="figure">
+<div id="ojs-cell-1-1" data-nodetype="expression">
+
+</div>
+<p></p><figcaption class="figure-caption">(a) PDF</figcaption><p></p>
+</figure>
+</div>
+<div id="fig-ojs-cell-1-2" class="quarto-figure quarto-figure-center anchored" style="flex-basis: 50.0%;justify-content: center;">
+<figure class="figure">
+<div id="ojs-cell-1-2" data-nodetype="expression">
+
+</div>
+<p></p><figcaption class="figure-caption">(b) CDF</figcaption><p></p>
+</figure>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure 1: The density (left) and cumulative distribution (right) functions of uniform <span class="math inline">\([0,1]\)</span> are shown by the blue lines. The CDF is only invertible on the support.</figcaption><p></p>
+</figure>
+</div>
+</div>
+<p>Moving forward, we assume that the <span class="math inline">\(X\)</span> is a continuous random variables and that its CDF <span class="math inline">\(F\)</span> is a strictly increasing, continuous function, at least on an interval of the real line. As a consequence, the CDF is invertible everywhere and the <span class="math inline">\(p\)</span>th quantile <span class="math inline">\(x_p=F^{-1}(p)\)</span> is uniquely defined. Examples of such distributions include the <a href="https://en.wikipedia.org/wiki/Exponential_distribution">exponential</a>, <a href="https://en.wikipedia.org/wiki/Chi-squared_distribution"><span class="math inline">\(\chi^2\)</span></a>- and <a href="https://en.wikipedia.org/wiki/F-distribution">F</a>-distribution on <span class="math inline">\((0,\infty)\)</span>, <a href="https://en.wikipedia.org/wiki/Normal_distribution">normal</a> and <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">Student’s t</a>-distribution on <span class="math inline">\(\mathbb R\)</span>, the <a href="https://en.wikipedia.org/wiki/Beta_distribution">Beta</a> distribution on <span class="math inline">\((0,1)\)</span>, etc.</p>
+<div id="exr-1" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 1 </strong></span></p>
+<p>Find a continuous distribution with the expected value <span class="math inline">\(0\)</span> and whose CDF is only intertible on a <strong>bounded</strong> interval of the real line.</p>
+</div>
+</section>
+<section id="observed-quantiles" class="level2">
+<h2 class="anchored" data-anchor-id="observed-quantiles">Observed Quantiles</h2>
+<p>While the quantiles of a probability distribution can be concretely defined (<a href="#def-quantile">Definition&nbsp;1</a>), there have been quite a few conventions for the assignment of quantiles for a batch of observations or a dataset. Although, for a large sample they make little to no difference for a descriptive analysis. We use the following convention:</p>
+<p>For a random sample <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> of size <span class="math inline">\(n\)</span>, the <a href="../data-science/order-statistics.html">order statistics</a> are denoted by <span class="math inline">\(X_{(1)}\leq X_{(2)}\leq\ldots\leq X_{(n)}\)</span>. And, the <span class="math inline">\(k/(n+1)\)</span> quantile of data is assigned to <span class="math inline">\(X_{(k)}\)</span>, the <span class="math inline">\(k\)</span>th-order statistic.</p>
+</section>
+</section>
+<section id="plotting-and-studying-q-q-plots" class="level1">
+<h1>Plotting and Studying Q-Q Plots</h1>
+<section id="observed-vs-theoretical-quantiles" class="level2">
+<h2 class="anchored" data-anchor-id="observed-vs-theoretical-quantiles">Observed vs Theoretical Quantiles</h2>
+<p>Let us consider a sample of <span class="math inline">\(n\)</span> from a uniform distribution from <span class="math inline">\([0,1]\)</span>. As proved in</p>
+<section id="testing-uniform-random-generator" class="level3">
+<h3 class="anchored" data-anchor-id="testing-uniform-random-generator">Testing Uniform Random Generator</h3>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="82" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 81;"><span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>viewof n <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">30</span><span class="op">,</span><span class="dv">100</span>]<span class="op">,</span>{ <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">'sample size'</span> })</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>  <span class="dt">style</span><span class="op">:</span> {  }<span class="op">,</span></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>  <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> { <span class="dt">label</span><span class="op">:</span> <span class="vs">`uniform quantiles →`</span><span class="op">,</span> <span class="dt">line</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">,</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> { <span class="dt">label</span><span class="op">:</span> <span class="vs">`↑ observed quantiles`</span><span class="op">,</span> <span class="dt">line</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">,</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">link</span>({<span class="dt">length</span><span class="op">:</span> <span class="dv">1</span>}<span class="op">,</span> {</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x1</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x2</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y1</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y2</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>({<span class="dt">length</span><span class="op">:</span> n}<span class="op">,</span> {</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">range</span>(n)<span class="op">.</span><span class="fu">map</span>(i <span class="kw">=&gt;</span> (i<span class="op">+</span><span class="dv">1</span>)<span class="op">/</span>(n<span class="op">+</span><span class="dv">1</span>))<span class="op">,</span></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">sort</span>( <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({<span class="dt">length</span><span class="op">:</span> n}<span class="op">,</span> d3<span class="op">.</span><span class="fu">randomUniform</span>()) )</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>    })<span class="op">,</span></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="two-observed-batches" class="level2">
+<h2 class="anchored" data-anchor-id="two-observed-batches">Two Observed Batches</h2>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="105" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 104;"><span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="cf">await</span> <span class="fu">FileAttachment</span>(<span class="st">'Bjerkdahl.csv'</span>)<span class="op">.</span><span class="fu">csv</span>({ <span class="dt">typed</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>dataA <span class="op">=</span> data<span class="op">.</span><span class="fu">filter</span>( d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">Treatment</span> <span class="op">===</span> <span class="st">'III'</span> )<span class="op">.</span><span class="fu">map</span>( d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">X</span> )<span class="op">.</span><span class="fu">sort</span>( (a<span class="op">,</span> b) <span class="kw">=&gt;</span> a <span class="op">-</span> b)<span class="op">;</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>dataB <span class="op">=</span> data<span class="op">.</span><span class="fu">filter</span>( d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">Treatment</span> <span class="op">===</span> <span class="st">'V'</span> )<span class="op">.</span><span class="fu">map</span>( d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">X</span> )<span class="op">.</span><span class="fu">sort</span>( (a<span class="op">,</span> b) <span class="kw">=&gt;</span> a <span class="op">-</span> b)<span class="op">;</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">'Quantiles of Group A'</span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {</span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">'Quantiles of Group B'</span></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">500</span><span class="op">,</span></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(dataB<span class="op">.</span><span class="fu">map</span>( (q<span class="op">,</span> i) <span class="kw">=&gt;</span> [ q<span class="op">,</span> dataA[i] ] )<span class="op">,</span> { <span class="dt">fill</span><span class="op">:</span> <span class="st">'steelblue'</span> })<span class="op">,</span></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>([[<span class="dv">0</span><span class="op">,</span><span class="dv">0</span>]<span class="op">,</span> [<span class="dv">500</span><span class="op">,</span> <span class="dv">500</span>]]<span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'gray'</span> })</span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span> </span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-4" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+</section>
+<section id="references" class="level1">
+
+
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-wilk68" class="csl-entry" role="doc-biblioentry">
+Wilk, M. B., and R. Gnanadesikan. 1968. <span>“Probability Plotting Methods for the Analysis of Data.”</span> <em>Biometrika</em> 55 (1): 1–17. <a href="http://www.jstor.org/stable/2334448">http://www.jstor.org/stable/2334448</a>.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>A function <span class="math inline">\(f:A\to B\)</span> is called invertible near a point <span class="math inline">\(x_0\in A\)</span> if there is an interval <span class="math inline">\(I\)</span> containing the point <span class="math inline">\(x_0\)</span> such that <span class="math inline">\(f\)</span> is a bijective map when restricted on <span class="math inline">\(I\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{majhi,
+  author = {Sushovan Majhi},
+  editor = {},
+  title = {Quantile-Quantile {Plots}},
+  date = {},
+  url = {https://smajhi.com/tutorials/data-science/qq},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-majhi" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Sushovan Majhi. n.d. <span>“Quantile-Quantile Plots.”</span> <a href="https://smajhi.com/tutorials/data-science/qq">https://smajhi.com/tutorials/data-science/qq</a>.
+</div></div></section></div></main> <!-- /main -->
+<script type="ojs-module-contents">
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"Plot.plot({\ngrid: true,\ny: {  ticks: 5 },\nx: { ticks: 3 },\nstyle: { fontSize: '1.2rem' },\nmarks: [\nPlot.line([[-1, 0],[0, 0]], { stroke: 'steelblue', strokeWidth: 3 }),\nPlot.line([[0, 1],[1, 1]], { stroke: 'steelblue', strokeWidth: 3 }),\nPlot.line([[1, 0],[2, 0]], { stroke: 'steelblue', strokeWidth: 3 }),\n]\n})\nPlot.line([[-1, 0],[0, 0],[1, 1], [2, 1]], { stroke: 'steelblue', strokeWidth: 3 }).plot({\ngrid: true,\ny: {  ticks: 5 },\nx: { ticks: 3 },\nstyle: { fontSize: '1.4rem' }\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"viewof n = Inputs.range([30,100],{ step: 1, label: 'sample size' })\nPlot.plot({\n  style: {  },\n  grid: true,\n  x: { label: `uniform quantiles →`, line: true },\n  y: { label: `↑ observed quantiles`, line: true },\n  marks: [\n    Plot.link({length: 1}, {\n      x1: 0,\n      x2: 1,\n      y1: 0,\n      y2: 1,\n    }),\n    Plot.dot({length: n}, {\n      x: d3.range(n).map(i => (i+1)/(n+1)),\n      y: d3.sort( Array.from({length: n}, d3.randomUniform()) )\n    }),\n  ]\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"data = await FileAttachment('Bjerkdahl.csv').csv({ typed: true });\ndataA = data.filter( d => d.Treatment === 'III' ).map( d => d.X ).sort( (a, b) => a - b);\ndataB = data.filter( d => d.Treatment === 'V' ).map( d => d.X ).sort( (a, b) => a - b);\nPlot.plot({\n  x: {\n    label: 'Quantiles of Group A'\n  },\n  y: {\n    label: 'Quantiles of Group B'\n  },\n  width: 500,\n  marks: [\n    Plot.dot(dataB.map( (q, i) => [ q, dataA[i] ] ), { fill: 'steelblue' }),\n    Plot.ruleX([0]),\n    Plot.ruleY([0]),\n    Plot.line([[0,0], [500, 500]], { stroke: 'gray' })\n  ], \n})\n"},{"methodName":"interpretQuiet","source":"shinyInput('n')"}]}
+</script>
+<script type="module">
+window._ojs.paths.runtimeToDoc = "../../data-science";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-right">© 2021 Sushovan Majhi 〈sush@smajhi.com〉</div>
+  </div>
+</footer>
+
+
+
+</body></html>

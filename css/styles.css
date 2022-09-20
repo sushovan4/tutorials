@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+SC:ital,wght@0,500;1,500&family=Alegreya:ital@0;1&display=swap');
+
+.solution {
+  position: relative;
+}
+.solution::after {
+  content: '▢';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.math.display {
+  display: block;
+  overflow-x: auto;
+}
+body {
+  font-size: 1.25rem;
+}
+output {
+  font-size: 1.25rem!important;
+}
+
+body, .navbar  {
+  font-family: 'Alegreya', serif;
+}
+svg, output {
+  font-family: 'Alegreya', serif!important;
+
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Alegreya SC', serif;
+  font-weight: normal;
+}
+
+.theorem {
+  border-radius: 0.3em;
+  background: #eee;
+  margin-bottom: 1em;
+}
+.theorem > p {
+  margin-bottom: 0.2em;
+  padding: 0.2em;
+}
+
+.definition > p:first-child, .exercise > p:first-child {
+  border-bottom: 0.15em solid white;
+}
+
+.timeline .item {
+  list-style: none;
+  border-left: 2px dashed lightgray;
+  position: relative;
+  padding: 1.2rem;
+  padding-left: 1rem;
+  border-bottom: 0.5px dashed lightgray;
+}
+
+.timeline .item:last-of-type {
+  border-bottom: none;
+}
+
+.timeline .year {
+  color: white;
+  font-size: 1rem;
+  position: relative;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: #282828;
+  height: 1.35rem;
+  position: absolute;
+  top: 1.5rem;
+  transform: translateX(-50%)  translateY(50%) rotate(-90deg);
+  left: 0;
+}
+
+@media only screen and (max-width: 650px) {
+  html {
+    font-size: 14px!important;
+  }
+}

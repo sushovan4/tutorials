@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sushovan Majhi">
+<meta name="dcterms.date" content="2022-09-20">
+
+<title>Order Statistics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: 1;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>
+    .quarto-title-block .quarto-title-banner {
+      color: white;
+background-image: url(order.svg);
+background-size: cover;
+    }
+    </style>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.smajhi.com">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">Tutorials</a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Order Statistics</h1>
+            <p class="subtitle lead">Quantiles of a Random Sample</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Statistics</div>
+                <div class="quarto-category">Data Science</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Sushovan Majhi </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 20, 2022</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#min-and-max-statistics" id="toc-min-and-max-statistics" class="nav-link" data-scroll-target="#min-and-max-statistics">Min and Max Statistics</a>
+  <ul class="collapse">
+  <li><a href="#experimenting-with-the-extrema" id="toc-experimenting-with-the-extrema" class="nav-link" data-scroll-target="#experimenting-with-the-extrema">Experimenting with the Extrema</a></li>
+  <li><a href="#probability-distributions-of-the-extrema" id="toc-probability-distributions-of-the-extrema" class="nav-link" data-scroll-target="#probability-distributions-of-the-extrema">Probability Distributions of the Extrema</a></li>
+  </ul></li>
+  <li><a href="#order-statistics" id="toc-order-statistics" class="nav-link" data-scroll-target="#order-statistics">Order Statistics</a>
+  <ul class="collapse">
+  <li><a href="#the-order-statistics-of-uniform-01" id="toc-the-order-statistics-of-uniform-01" class="nav-link" data-scroll-target="#the-order-statistics-of-uniform-01">The Order Statistics of Uniform <span class="math inline">\([0,1]\)</span></a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/sushovan4/tutorials/edit/main/data-science/order-statistics.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/sushovan4/tutorials/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In statistics, a one-value summary of a random sample is called a <em>statistic</em>. Mean, standard deviation, median, min, max of a sample are some of the commonly used statistics. While the computation of mean and standard deviation use the actual sample values—min, max, and median are computed using only their relative positions or <em>order</em>. When a sample is sorted in non-decreasing order, the first and the last positions are the min and the max, and the middle position is the median. The notion of order statistics generalizes such summaries of a sample.</p>
+<p>Since this is the most prevalent use case, we always consider a random sample <span class="math inline">\(X_1, X_2,\ldots, X_n\)</span> to be <em>i.i.d.</em> from a <em>continuous</em> random variable <span class="math inline">\(X\)</span> following a common probability distribution <span class="math inline">\(\mathbb F(x)=\mathbb P(X\leq x)\)</span>. The <em>ordered sample</em> is denoted by <span class="math inline">\(X_{(1)}\leq X_{(2)}\leq\ldots\leq X_{(n)}\)</span>, and <span class="math inline">\(X_{(k)}\)</span> is called the <span class="math inline">\(k\)</span>th-<strong>order statistic</strong> for any <span class="math inline">\(1\leq k\leq n\)</span>.</p>
+<p>So, the <span class="math inline">\(1\)</span>st and the <span class="math inline">\(n\)</span>th order statistics are simply the sample min and smaple max, respectively. Moreover, <span class="math inline">\(X_{\left(\frac{n-1}{2}\right)}\)</span> is the sample median if <span class="math inline">\(n\)</span> is odd.</p>
+<p>Before exploring the sampling distributions of the order statistics in full generality, we start playing around with two very special order statistics—min and max.</p>
+</section>
+<section id="min-and-max-statistics" class="level1">
+<h1>Min and Max Statistics</h1>
+<p>In our notations, <span class="math inline">\(X_{(1)}\)</span> and <span class="math inline">\(X_{(n)}\)</span> are the sample min and max, respectively. For simplicity of notation, however, we let <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> denote the min and the max.</p>
+<section id="experimenting-with-the-extrema" class="level2">
+<h2 class="anchored" data-anchor-id="experimenting-with-the-extrema">Experimenting with the Extrema</h2>
+<p>Let us consider a random sample of size <span class="math inline">\(n=10\)</span> from the uniform distribution over the interval <span class="math inline">\([0,1]\)</span>. The sampled data-points are shown in <a href="#fig-1">Figure&nbsp;1</a>, along with the min (in green) and max (in red).</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="33" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 32;"><span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">70</span><span class="op">,</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> { <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span><span class="dv">1</span>] } <span class="op">,</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> { <span class="dt">ticks</span><span class="op">:</span> <span class="dv">0</span> }<span class="op">,</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>]<span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'lightgray'</span> })<span class="op">,</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>({ <span class="dt">length</span><span class="op">:</span> <span class="dv">10</span> }<span class="op">,</span> {</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({ <span class="dt">length</span><span class="op">:</span> <span class="dv">10</span> })<span class="op">.</span><span class="fu">fill</span>(<span class="dv">0</span>)<span class="op">,</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">sort</span>(<span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({ <span class="dt">length</span><span class="op">:</span> <span class="dv">10</span> }<span class="op">,</span> d3<span class="op">.</span><span class="fu">randomUniform</span>()) )<span class="op">,</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>      <span class="dt">fill</span><span class="op">:</span> (d<span class="op">,</span> i) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(i<span class="op">===</span><span class="dv">0</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>          <span class="cf">return</span> <span class="st">'green'</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(i<span class="op">===</span><span class="dv">9</span>)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>          <span class="cf">return</span> <span class="st">'red'</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>          <span class="cf">return</span> <span class="st">'lightgray'</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div id="ojs-cell-1" data-nodetype="expression">
+
+</div>
+<p></p><figcaption class="figure-caption">Figure 1: A random sample of size <span class="math inline">\(10\)</span> from <span class="math inline">\(\mathrm{unif}([0,1])\)</span>. The red and blue points denote the min and the max, respectively.</figcaption><p></p>
+</figure>
+</div>
+</div>
+<p>In this <em>random instance</em> of the sample, the sample min (equivalently max) is not very far from <span class="math inline">\(0\)</span> (equaivalently <span class="math inline">\(1\)</span>). We wonder if this is generally the case across random instances. It would definitely be counter-intuitive if it turns out that way. In our setup, each sample point <span class="math inline">\(X_i\)</span> takes on a value in <span class="math inline">\([0,1]\)</span>, without any unfair bias in favor of a particular point—moreover, <span class="math inline">\(X_i\)</span> is oblivious to the other draws <span class="math inline">\(X_j\)</span> for <span class="math inline">\(i\neq j\)</span>. So, it is most natural to think any point in the interval is equally-likely to be the min and max. In order to put this intuition to test, we take <span class="math inline">\(m=5\)</span> random samples. Each sample is drawn on a line as before, and the samples are stacked vertically in <a href="#fig-2">Figure&nbsp;2</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="58" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 57;"><span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">250</span><span class="op">,</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> { <span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span><span class="dv">1</span>]}<span class="op">,</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> { <span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">tickRotate</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span> <span class="dt">line</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">,</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>( <span class="fu">rUnif</span>(<span class="dv">5</span><span class="op">,</span> <span class="dv">10</span>)<span class="op">,</span> {</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>      <span class="dt">x</span><span class="op">:</span> <span class="st">'X'</span><span class="op">,</span> </span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>      <span class="dt">y</span><span class="op">:</span> (d) <span class="kw">=&gt;</span> <span class="st">"sample "</span> <span class="op">+</span> d<span class="op">.</span><span class="at">sample</span> <span class="op">,</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>      <span class="dt">fill</span><span class="op">:</span> (d) <span class="kw">=&gt;</span> {</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(d<span class="op">.</span><span class="at">k</span> <span class="op">===</span> <span class="dv">1</span>)</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>          <span class="cf">return</span> <span class="st">'green'</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(d<span class="op">.</span><span class="at">k</span> <span class="op">===</span> <span class="dv">10</span>)</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>          <span class="cf">return</span> <span class="st">'red'</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>          <span class="cf">return</span> <span class="st">'lightgray'</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div id="ojs-cell-2" data-nodetype="expression">
+
+</div>
+<p></p><figcaption class="figure-caption">Figure 2: Samples are drawn on the horizontal lines, the red minimums and maximums are again shown in green and red.</figcaption><p></p>
+</figure>
+</div>
+</div>
+<p>As it turns out, sample mean <span class="math inline">\(U\)</span> has a tendency to remain to close <span class="math inline">\(0\)</span> and sample max <span class="math inline">\(V\)</span> has a tendency to remain to close <span class="math inline">\(1\)</span>! More specifically, for a sample of size <span class="math inline">\(n\)</span> from uniform <span class="math inline">\([0,1]\)</span> we have <span class="math display">\[E[U]=\frac{1}{n+1}\text{ and }E[V]=\frac{n}{n+1}.\]</span></p>
+</section>
+<section id="probability-distributions-of-the-extrema" class="level2">
+<h2 class="anchored" data-anchor-id="probability-distributions-of-the-extrema">Probability Distributions of the Extrema</h2>
+<p>Let us try to prove a little more general result. We compute now the density of the extrema <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> of a sample from a general probability distribution.</p>
+<div id="thm-1" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 1 (Density Function of <span class="math inline">\(V\)</span>) </strong></span></p>
+<p>If <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> are independent random variables with the common CDF <span class="math inline">\(F\)</span> and density <span class="math inline">\(f\)</span>, then the density of <span class="math inline">\(V\)</span> is <span class="math display">\[f_V(v)=nf(v)[F(v)]^{n-1}.\]</span></p>
+</div>
+<div class="solution proof">
+<p><span class="proof-title"><em>Solution</em>. </span>We first compute the CDF <span class="math inline">\(F_V(v)\)</span> of <span class="math inline">\(V\)</span>, then differentiate it to get the PDF. In order to compute <span class="math inline">\(F_V(v)\)</span>, we note that <span class="math inline">\(V\leq v\)</span> <em>if and only if</em> every <span class="math inline">\(X_i\leq v\)</span>. So, <span class="math display">\[\begin{align}
+F_V(v) &amp;=\mathbb P(V\leq v) \\
+&amp;=\mathbb P(X_1\leq v, X_2\leq v, \ldots, X_n\leq v) \\
+&amp;=\mathbb P(X_1\leq v)\mathbb P(X_2\leq v)\ldots\mathbb P(X_n\leq v) \\
+&amp;=[F(v)]^n.
+\end{align}\]</span> Differentiating we get the density <span class="math display">\[
+\begin{align}
+f_V(v) &amp;=\frac{d}{dv}[F(v)]^n \\
+&amp;=n[F(v)]^{n-1}\frac{dF(v)}{dv} \\
+&amp;=n[F(v)]^{n-1}f(v).
+\end{align}
+\]</span></p>
+</div>
+<div id="exr-1" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 1 </strong></span></p>
+<p>Prove that, under the conditions of <a href="#thm-1">Theorem&nbsp;1</a>, the density of <span class="math inline">\(U\)</span> is <span class="math display">\[f_U(u)=nf(u)[1-F(u)]^{n-1}.\]</span></p>
+</div>
+</section>
+</section>
+<section id="order-statistics" class="level1">
+<h1>Order Statistics</h1>
+<div id="thm-2" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 2 </strong></span></p>
+<p>The density of <span class="math inline">\(X_{(k)}\)</span>, the <span class="math inline">\(k\)</span>th-order statistic, is <span class="math display">\[
+f_k(x) = \frac{n!}{(k-1)!(n-k)!}f(x)F^{k-1}(x)[1-F(x)]^{n-k}.
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>As before, we compute the CDF, <span class="math inline">\(F_k(x)=\mathbb P(X_{(k)}\leq x)\)</span>, first then differentiate it to find the density. We note that <span class="math inline">\(X_{(k)}\leq x\)</span> <em>if and only if</em> <strong>at least</strong> <span class="math inline">\(k\)</span> many sample points (<span class="math inline">\(X_i\)</span>s) are not greater than <span class="math inline">\(x\)</span>. Consequently, if denote by <span class="math inline">\(Z\)</span> the number of <span class="math inline">\(X_i\)</span>s that are not greater than this fixed number <span class="math inline">\(x\)</span>, the event that <span class="math inline">\(X_{(k)}\leq x\)</span> is equaivalent to having <span class="math inline">\(Z\geq k\)</span>. So, <span class="math display">\[
+F_k(x)=\mathbb P(X_{(k)}\leq x)=\mathbb P(Z\geq k)
+\]</span> Since <span class="math inline">\(X_i\)</span>s are independent, we also note that <span class="math inline">\(Z\)</span> is a random variable that follows the Binomial distribution distribution with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p=\mathbb P(X_i\leq x)=F(x)\)</span>. Therefore, <span class="math display">\[\begin{align}
+F_k(x) &amp;= \sum\limits_{i=k}^n{n \choose i}p^i(1-p)^{n-i} \\
+&amp;= \sum\limits_{i=k}^n{n \choose i}F^i(x)[1-F(x)]^{n-i}
+\end{align}\]</span> Now, we differentiate <span class="math inline">\(F_k(x)\)</span> to find the density <span class="math display">\[
+\begin{align}
+f_k(x) &amp;= \frac{d}{dx}F_k(x) \\
+&amp;=\frac{d}{dx}\left[\sum\limits_{i=k}^n{n \choose i}F^i(x)[1-F(x)]^{n-i}\right] \\
+&amp;=\sum\limits_{i=k}^n{n \choose i}\frac{d}{dx}\bigg[F^i(x)[1-F(x)]^{n-i}\bigg] \\
+&amp;=\sum\limits_{i=k}^n{n \choose i}\frac{d}{dx}\bigg[F^i(x)[1-F(x)]^{n-i}\bigg]
+\end{align}
+\]</span> Using the chain rule, we get <span class="math display">\[
+\begin{align}
+f_k(x)&amp;=\sum\limits_{i=k}^n{n \choose i}\bigg[iF^{i-1}(x)\frac{dF(x)}{dx}[1-F(x)]^{n-i} \\ &amp;\quad+F^i(x)(n-i)[1-F(x)]^{n-i-1}\frac{d[1-F_k(x)]}{dx}\bigg] \\
+&amp;=\sum\limits_{i=k}^n{n \choose i}iF^{i-1}(x)f(x)[1-F(x)]^{n-i} \\
+&amp;\quad-\sum\limits_{i=k}^n{n \choose i}(n-i)F^i(x)[1-F(x)]^{n-i-1}f(x)
+\end{align}
+\]</span> Here, we the following two identities given as an exercise.</p>
+<p>So, <span class="math display">\[
+\begin{align}
+f_k(x)&amp;=\sum\limits_{i=k}^n \frac{n!}{(i-1)!(n-i)!} F^{i-1}(x)f(x)[1-F(x)]^{n-i} \\
+&amp;\quad-\sum\limits_{i=k}^n\frac{n!}{i!(n-i-1)!} F^i(x)[1-F(x)]^{n-i-1}f(x) \\
+&amp;=\sum\limits_{i=k}^n\bigg[\frac{n!}{(i-1)!(n-i)!} F^{i-1}(x)f(x)[1-F(x)]^{n-i} \\
+&amp;\quad-\frac{n!}{i!(n-i-1)!} F^i(x)[1-F(x)]^{n-i-1}f(x)\bigg] \\
+\end{align}
+\]</span> This is a <a href="https://en.wikipedia.org/wiki/Telescoping_series">telescoping series</a>. Therefore, only the first term survives <span class="math display">\[
+f_k(x)=\frac{n!}{(k-1)!(n-k)!}f(x)F^{k-1}(x)[1-F(x)]^{n-k}.
+\]</span></p>
+</div>
+<div id="exr-2" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2 </strong></span></p>
+<p>Prove that <span class="math display">\[{n \choose i}i=\frac{n!}{(i-1)!(n-i)!}\]</span> and <span class="math display">\[{n \choose i}(n-i)=\frac{n!}{i!(n-i-1)!}.\]</span></p>
+</div>
+<section id="the-order-statistics-of-uniform-01" class="level2">
+<h2 class="anchored" data-anchor-id="the-order-statistics-of-uniform-01">The Order Statistics of Uniform <span class="math inline">\([0,1]\)</span></h2>
+<p>We can now apply the density obtained in <a href="#thm-2">Theorem&nbsp;2</a> to compute the expectations of the order statistics for a sample of size <span class="math inline">\(n\)</span> from uniform <span class="math inline">\([0,1]\)</span>. In this case, <span class="math display">\[
+f(x)=\begin{cases}
+1,&amp;0\leq x\leq 1 \\
+0,&amp;\text{ otherwise}
+\end{cases}
+\]</span> And, <span class="math display">\[
+F(x)=\begin{cases}
+0,&amp;x&lt;0 \\
+x,&amp;0\leq x\leq 1\\
+1,&amp;x&gt;1
+\end{cases}
+\]</span> As a result, the density of the <span class="math inline">\(k\)</span>th-order statistic is <span class="math display">\[
+f_k(x)=\begin{cases}
+\frac{n!}{(k-1)!(n-k)!}x^{k-1}(1-x)^{n-k},&amp; 0\leq x\leq 1 \\
+0,&amp;\text{ otherwise}
+\end{cases}
+\]</span> The expectation is <span class="math display">\[
+\begin{align}
+E[X_{(k)}] &amp;=\int_0^1x\cdot\frac{n!}{(k-1)!(n-k)!}x^{k-1}(1-x)^{n-k}dx \\
+&amp;=\frac{n!}{(k-1)!(n-k)!}\int_0^1x^k(1-x)^{n-k}dx.
+\end{align}
+\]</span> The form of the integral is known as the <a href="https://en.wikipedia.org/wiki/Beta_function">Beta function</a>. Using its relation to binomial coefficients, we can then write <span class="math display">\[
+\begin{align}
+E[X_{(k)}]
+&amp;=\frac{n!}{(k-1)!(n-k)!}\int_0^1x^k(1-x)^{n-k}dx \\
+&amp;=\frac{n!}{(k-1)!(n-k)!}\cdot\frac{k!(n-k)!}{(k+n-k+1)!} \\
+&amp;=\frac{k}{n+1}.
+\end{align}
+\]</span> The <em>typical</em> positions of random draws (when sorted) are equally spaced over <span class="math inline">\([0,1]\)</span> as evident in the following plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="218" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 217;"><span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a>viewof n <span class="op">=</span> <span class="fu">slider</span>({ </span>
+<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a>          <span class="dt">min</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a>          <span class="dt">max</span><span class="op">:</span> <span class="dv">200</span><span class="op">,</span></span>
+<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a>          <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> </span>
+<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a>          <span class="dt">label</span><span class="op">:</span> <span class="vs">`n`</span> </span>
+<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a>viewof m <span class="op">=</span> <span class="fu">slider</span>({     <span class="dt">min</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a>          <span class="dt">max</span><span class="op">:</span> <span class="dv">200</span><span class="op">,</span><span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`m`</span> })<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="231" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 230;"><span id="cb4-231"><a href="#cb4-231" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="fu">rUnif</span>(m<span class="op">,</span> n)<span class="op">;</span></span>
+<span id="cb4-232"><a href="#cb4-232" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb4-233"><a href="#cb4-233" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> { <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">,</span></span>
+<span id="cb4-234"><a href="#cb4-234" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb4-235"><a href="#cb4-235" aria-hidden="true" tabindex="-1"></a>  Plot<span class="op">.</span><span class="fu">dot</span>(d<span class="op">,</span>{ <span class="dt">x</span><span class="op">:</span> <span class="st">'X'</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">'sample'</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">'k'</span>})</span>
+<span id="cb4-236"><a href="#cb4-236" aria-hidden="true" tabindex="-1"></a>  <span class="co">//Plot.ruleX(Array.from({ length: n }, (d, k) =&gt; ({ k: k+1, x: (k+1)/(n+1) })),     //{ x: 'x', stroke: 'k' })</span></span>
+<span id="cb4-237"><a href="#cb4-237" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb4-238"><a href="#cb4-238" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In addition to the marginal densities of the order statistics, one can also compute the joint distribution. As one can imagine, the computation gets very complicated. Among other applications, order statiscs are used to define <em>quantiles of a sample</em>, which provide an extremely useful graphical tool called qq-plots.</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="245" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 244;"><span id="cb5-245"><a href="#cb5-245" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {slider} <span class="im">from</span> <span class="st">"@jashkenas/inputs"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="249" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 248;"><span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>rUnif <span class="op">=</span> <span class="kw">function</span>(m<span class="op">,</span> n) {</span>
+<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> out <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(<span class="kw">let</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;=</span> m<span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> d <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({ <span class="dt">length</span><span class="op">:</span> n }<span class="op">,</span>  d3<span class="op">.</span><span class="fu">randomUniform</span>( ) )</span>
+<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">sort</span>( (a<span class="op">,</span>b) <span class="kw">=&gt;</span> a <span class="op">-</span> b )<span class="op">.</span><span class="fu">map</span>( (X<span class="op">,</span> k) <span class="kw">=&gt;</span> ({X<span class="op">,</span> <span class="dt">k</span><span class="op">:</span> k<span class="op">+</span><span class="dv">1</span><span class="op">,</span> <span class="dt">sample</span><span class="op">:</span> i}) )<span class="op">;</span></span>
+<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a>    out<span class="op">.</span><span class="fu">push</span>(<span class="op">...</span>d)<span class="op">;</span></span>
+<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
+<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-6" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"Plot.plot({\n  height: 70,\n  x: { domain: [0,1] } ,\n  y: { ticks: 0 },\n  marks: [\n    Plot.ruleY([0], { stroke: 'lightgray' }),\n    Plot.dot({ length: 10 }, {\n      y: Array.from({ length: 10 }).fill(0),\n      x: d3.sort(Array.from({ length: 10 }, d3.randomUniform()) ),\n      fill: (d, i) => {\n        if(i===0)\n          return 'green'\n        if(i===9)\n          return 'red'\n        else\n          return 'lightgray'\n      }\n    })\n  ]\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"Plot.plot({\n  height: 250,\n  marginLeft: 50,\n  x: { label: null, domain: [0,1]},\n  y: { label: null, tickRotate: 30, line: true, grid: true },\n  marks: [\n    Plot.dot( rUnif(5, 10), {\n      x: 'X', \n      y: (d) => \"sample \" + d.sample ,\n      fill: (d) => {\n        if(d.k === 1)\n          return 'green'\n        if(d.k === 10)\n          return 'red'\n        else\n          return 'lightgray'\n      }\n    })\n  ]\n});\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"viewof n = slider({ \n          min: 0,\n          max: 200,\n          step: 1, \n          label: `n` \n});\nviewof m = slider({     min: 0,\n          max: 200,step: 1, label: tex`m` });\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"d = rUnif(m, n);\nPlot.plot({\n  y: { grid: true },\n  marks: [\n  Plot.dot(d,{ x: 'X', y: 'sample', fill: 'k'})\n  //Plot.ruleX(Array.from({ length: n }, (d, k) => ({ k: k+1, x: (k+1)/(n+1) })),     //{ x: 'x', stroke: 'k' })\n  ]\n});\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"import {slider} from \"@jashkenas/inputs\"\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"rUnif = function(m, n) {\n  let out = [];\n  for(let i = 1; i <= m; i++) {\n    let d = Array.from({ length: n },  d3.randomUniform( ) )\n        .sort( (a,b) => a - b ).map( (X, k) => ({X, k: k+1, sample: i}) );\n    out.push(...d);\n  }\n  return out;\n}\n"},{"methodName":"interpretQuiet","source":"shinyInput('n')"},{"methodName":"interpretQuiet","source":"shinyInput('m')"}]}
+</script>
+<script type="module">
+window._ojs.paths.runtimeToDoc = "../../data-science";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-right">© 2021 Sushovan Majhi 〈sush@smajhi.com〉</div>
+  </div>
+</footer>
+
+
+
+</body></html>

@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sushovan Majhi">
+<meta name="dcterms.date" content="2021-08-01">
+
+<title>Smith Normal Form</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: 1;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>
+    .quarto-title-block .quarto-title-banner {
+      background-image: url(pic.png);
+background-size: cover;
+    }
+    </style>
+<script type="module" src="../../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../css/styles.css">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.smajhi.com">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">Tutorials</a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Smith Normal Form</h1>
+            <p class="subtitle lead">Interactive Tutorial on the Smith Normal Form</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Sushovan Majhi </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 1, 2021</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#permitted-matrix-operations" id="toc-permitted-matrix-operations" class="nav-link" data-scroll-target="#permitted-matrix-operations">Permitted Matrix Operations</a></li>
+  <li><a href="#smith-normal-form" id="toc-smith-normal-form" class="nav-link" data-scroll-target="#smith-normal-form">Smith Normal Form</a></li>
+  <li><a href="#application" id="toc-application" class="nav-link" data-scroll-target="#application">Application</a></li>
+  </ul></li>
+  <li><a href="#elementary-operations" id="toc-elementary-operations" class="nav-link" data-scroll-target="#elementary-operations">Elementary Operations</a>
+  <ul class="collapse">
+  <li><a href="#elementary-matrices" id="toc-elementary-matrices" class="nav-link" data-scroll-target="#elementary-matrices">Elementary Matrices</a></li>
+  <li><a href="#row-operations" id="toc-row-operations" class="nav-link" data-scroll-target="#row-operations">Row Operations</a></li>
+  <li><a href="#column-operations" id="toc-column-operations" class="nav-link" data-scroll-target="#column-operations">Column Operations</a></li>
+  <li><a href="#demo" id="toc-demo" class="nav-link" data-scroll-target="#demo">Demo</a></li>
+  </ul></li>
+  <li><a href="#the-reduction-algorithm" id="toc-the-reduction-algorithm" class="nav-link" data-scroll-target="#the-reduction-algorithm">The Reduction Algorithm</a>
+  <ul class="collapse">
+  <li><a href="#step-0-set-the-offset" id="toc-step-0-set-the-offset" class="nav-link" data-scroll-target="#step-0-set-the-offset">Step 0: Set the offset</a></li>
+  <li><a href="#step-1-find-the-best-pivot" id="toc-step-1-find-the-best-pivot" class="nav-link" data-scroll-target="#step-1-find-the-best-pivot">Step 1: Find the Best Pivot</a></li>
+  <li><a href="#step-2-move-pivot" id="toc-step-2-move-pivot" class="nav-link" data-scroll-target="#step-2-move-pivot">Step 2: Move Pivot</a></li>
+  <li><a href="#step-3-diagonalize" id="toc-step-3-diagonalize" class="nav-link" data-scroll-target="#step-3-diagonalize">Step 3: Diagonalize</a></li>
+  </ul></li>
+  <li><a href="#change-of-bases" id="toc-change-of-bases" class="nav-link" data-scroll-target="#change-of-bases">Change of Bases</a></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/sushovan4/tutorials/edit/main/topology/smith/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/sushovan4/tutorials/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Matrix reduction plays a fundamental role in the study of vector spaces and linear transformations. Reduction of a matrix to a <em>canonical</em> or <a href="https://en.wikipedia.org/wiki/Canonical_form"><em>normal form</em></a> finds its use in almost all applied fields of science. While there are many different normal forms a matrix can be reduced to, a normal form is usually the product of much simpler and well-understood (e.g., diagonal, upper/lower triangular, etc) matrices. Since, the reduction process faithfully carries most of the <em>nice</em> properties of the original matrix, one can use a normal form to <em>infer</em> some of those properties from matrices with relatively simple structure.</p>
+<p>The choice of the normal form can sometimes be demanded by a particular application, or be limited by the algebraic operations one is allowed to perform on the entries of the original matrix. Today we consider, for reduction, only <span class="math inline">\(\mathbb Z\)</span>-matrices, i.e., matrices that are allowed to have only integer entries. As a consequence, the only permitted operations on the entries of such a matrix are <em>addition</em> and <em>multiplication</em>—but not <em>division</em>. We denote by <span class="math inline">\(\mathcal{M}_{n,m}(\mathbb Z)\)</span> the set of all integer matrices with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(m\)</span> columns. In the special case of square matrices (<span class="math inline">\(m=n\)</span>), we simply call it <span class="math inline">\(\mathcal{M}_{m}(\mathbb Z)\)</span> or <span class="math inline">\(\mathcal{M}_{n}(\mathbb Z)\)</span>. Note that the identity matrix, <span class="math inline">\(I_{m}\)</span>, of dimension <span class="math inline">\(m\)</span> is a <span class="math inline">\(\mathbb Z\)</span>-matrix, i.e., <span class="math inline">\(I_m\in\mathcal{M}_{m}(\mathbb Z)\)</span>.</p>
+<section id="permitted-matrix-operations" class="level3">
+<h3 class="anchored" data-anchor-id="permitted-matrix-operations">Permitted Matrix Operations</h3>
+<p>Although our hands are now tied by the restriction on the operations allowed on a matrix <span class="math inline">\(A\in\mathcal{M}_{n,m}(\mathbb Z)\)</span>, we can still follow the usual definitions of matrix <strong>addition</strong>, <strong>subtraction</strong>, and <strong>multiplication</strong>— also <strong>determinant</strong> and <strong>inverse</strong> of a square matrix. For a square matrix <span class="math inline">\(A\in\mathcal{M}_{n}(\mathbb Z)\)</span>, its determinant is defined the <a href="https://en.wikipedia.org/wiki/Leibniz_formula_for_determinants">usual way</a>. Also, <span class="math inline">\(A\)</span> is said to have an inverse <span class="math inline">\(B\in\mathcal{M}_{n}(\mathbb Z)\)</span> if <span class="math inline">\(AB=BA=I_n\)</span>. The set of all invertible (square) matrices of dimension <span class="math inline">\(n\)</span> is denoted by <span class="math inline">\(GL_{n}(\mathbb Z)\)</span>.</p>
+</section>
+<section id="smith-normal-form" class="level3">
+<h3 class="anchored" data-anchor-id="smith-normal-form">Smith Normal Form</h3>
+<p>Given an <span class="math inline">\(A\in\mathcal{M}_{n,m}(\mathbb Z)\)</span>, we seek invertible matrices <span class="math inline">\(P\in GL_{m}(\mathbb Z)\)</span> and <span class="math inline">\(Q\in GL_{n}(\mathbb Z)\)</span> such that <span class="math inline">\(D=Q^{-1}AP,\)</span> where <span class="math inline">\(D\)</span> is an <span class="math inline">\(n\times m\)</span> diagonal integer matrix: <span class="math display">\[
+\newcommand\bigzero{\makebox(0,0){\text{\huge0}}}
+\begin{pmatrix}
+\begin{array}{c:c}
+  \begin{matrix}
+    d_1 &amp; 0 &amp; \ldots &amp; 0 \\
+    0 &amp; d_2 &amp; \ldots &amp; 0\\
+    0 &amp; \ldots &amp; \ldots &amp; 0 \\
+    0 &amp; \ldots &amp; 0 &amp; d_k \\
+  \end{matrix}
+  &amp; {\huge0}_{k,m-k} \\
+  \hdashline \\
+  {\huge0}_{n-k,k} &amp; {\huge0}_{n-k,m-k}
+\end{array}
+\end{pmatrix}
+\]</span> with <span class="math inline">\(d_i\geq0\)</span> for all <span class="math inline">\(i=1, 2, \ldots, k\)</span> and <span class="math inline">\(d_1| d_2| \ldots | d_k\)</span>.</p>
+<p><strong>Note:</strong> - the diagonal matrix <span class="math inline">\(D\)</span> always exists, as we allow it to be a zero matrix; it is also <em>unique</em>. - <span class="math inline">\(P,Q\)</span> may not, however, be unique [artin]. - if <span class="math inline">\(A\)</span> is viewed as the matrix of a linear transformation <span class="math inline">\(T:G_1\to G_2\)</span> between two <a href="../../topology/abelian-groups/index.html">finitely-generated free abelian groups</a>, then <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> are the <em>basechange matrices</em> for <span class="math inline">\(G_1\)</span> and <span class="math inline">\(G_2\)</span>, respectively.</p>
+</section>
+<section id="application" class="level3">
+<h3 class="anchored" data-anchor-id="application">Application</h3>
+<p>Unlike the other popular canonical forms—e.g., the Jordan normal form for matrices over an <em>algebraically-closed</em> field—the Smith normal form is particularly relevant in the context of <span class="math inline">\(\mathbb Z\)</span>-modules, more generally <span class="math inline">\(R\)</span>-modules [artin]. In the field of combinatorial topology, the reduction to Smith normal form facilitates the computation of the <a href="https://en.wikipedia.org/wiki/Homology_(mathematics)">homology groups</a> of finte <a href="https://en.wikipedia.org/wiki/Simplicial_complex">simplicial complexes</a> [Munkres84].</p>
+</section>
+</section>
+<section id="elementary-operations" class="level2">
+<h2 class="anchored" data-anchor-id="elementary-operations">Elementary Operations</h2>
+<p>As stated above without a proof that the reduction of an integer matrix to a Smith normal form always exists. We now present the steps one can perform to decompose a given matrix. The basis of the reduction process involves three <strong>elementary operations</strong>. We invoke them repeatedly on the original matrix in the right order. We are going to use three elementary <em>row operations</em> and three corresonding <em>column operations</em>.</p>
+<section id="elementary-matrices" class="level3">
+<h3 class="anchored" data-anchor-id="elementary-matrices">Elementary Matrices</h3>
+<p>Each of the following row (and column) operations can also be described as pre (and post) multiplication by an <strong>elementary matrix</strong>. For each elementary operation, there is an associated elementary matrix, which is obtained by performing the same operation on the identity matrix of the right size.</p>
+</section>
+<section id="row-operations" class="level3">
+<h3 class="anchored" data-anchor-id="row-operations">Row Operations</h3>
+<p>We first define and then demonstrate the elementary row operations. The outcome <span class="math inline">\(A'\)</span> of each row operation on <span class="math inline">\(A\)</span> is a <em>pre</em>-multiplication of <span class="math inline">\(A\)</span> by an elementary matrix <span class="math inline">\(E\)</span>, i.e., <span class="math inline">\(A'=EA\)</span>. The three types of row operations are as follows:</p>
+<ul>
+<li>Multiply the <span class="math inline">\(i\)</span>-th row by <span class="math inline">\(-1\)</span></li>
+<li>Exchange the <span class="math inline">\(i\)</span>-th and <span class="math inline">\(j\)</span>-th row</li>
+<li>Replace the <span class="math inline">\(i\)</span>-th row with the row plus <span class="math inline">\(q\)</span> times the <span class="math inline">\(j\)</span>-th row (<span class="math inline">\(i\neq j, q\neq 0\)</span>)</li>
+</ul>
+</section>
+<section id="column-operations" class="level3">
+<h3 class="anchored" data-anchor-id="column-operations">Column Operations</h3>
+<p>The outcome <span class="math inline">\(A'\)</span> of each column operation on <span class="math inline">\(A\)</span> is <em>post</em>-multiplication of <span class="math inline">\(A\)</span> by an elementary matrix <span class="math inline">\(E\)</span>, i.e., <span class="math inline">\(A'=AE\)</span>. The three types of column operations are as follows:</p>
+<ul>
+<li>Multiply the <span class="math inline">\(i\)</span>-th column by <span class="math inline">\(-1\)</span></li>
+<li>Exchange the <span class="math inline">\(i\)</span>-th and <span class="math inline">\(j\)</span>-th column</li>
+<li>Replace <span class="math inline">\(i\)</span>-th column with the column plus <span class="math inline">\(q\)</span> times the <span class="math inline">\(j\)</span>-th column (<span class="math inline">\(i\neq j, q\neq 0\)</span>)</li>
+</ul>
+</section>
+<section id="demo" class="level3">
+<h3 class="anchored" data-anchor-id="demo">Demo</h3>
+<p>The operations are best understood when demonstrated on an example matrix. To that end, we first generate a random matrix <span class="math inline">\(A\)</span> with integer (between <span class="math inline">\(-5\)</span> and <span class="math inline">\(5\)</span>) entries by choosing the number of rows and columns using the sliders.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1" data-startfrom="72" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 71;"><span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>viewof m <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">6</span>]<span class="op">,</span> {</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of rows (n):"</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>viewof n <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">6</span>]<span class="op">,</span> {</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">4</span><span class="op">,</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of cols (m):"</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<p>If you do not like the random matrix, try fiddling with the above sliders to generate a new one!</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2" data-startfrom="85" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 84;"><span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>tex<span class="op">.</span><span class="fu">block</span><span class="vs">`A=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">mat2Tex</span>(A)<span class="sc">}</span><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p><strong>See for yourself:</strong> From the dropdown below choose the operation type (row/column) and an operation. Also, set the values of the arguemts for the operations chosen, using the sliders.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3" data-startfrom="92" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 91;"><span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>viewof opType <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>([<span class="st">"row"</span><span class="op">,</span> <span class="st">"col"</span>]<span class="op">,</span> {</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="st">"Type of operation"</span></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>viewof operation <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>(</span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>  Operations[opType]<span class="op">.</span><span class="fu">map</span>((o) <span class="kw">=&gt;</span> o<span class="op">.</span><span class="at">name</span>)<span class="op">,</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">"operation"</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>viewof i <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> opType <span class="op">===</span> <span class="st">"row"</span> <span class="op">?</span> n <span class="op">:</span> m]<span class="op">,</span> {</span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`i`</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>viewof j <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> opType <span class="op">===</span> <span class="st">"row"</span> <span class="op">?</span> n <span class="op">:</span> m]<span class="op">,</span> {</span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`j`</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>viewof q <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">20</span><span class="op">,</span> <span class="dv">20</span>]<span class="op">,</span> {</span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="fu">tex</span><span class="vs">`q`</span></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<p>Here is the outcome matrix:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4" data-startfrom="118" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 117;"><span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>tex<span class="op">.</span><span class="fu">block</span><span class="vs">`A'=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">mat2Tex</span>(Result[<span class="dv">0</span>])<span class="sc">}</span><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-4" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>The corresponding elementary matrix <span class="math inline">\(E\)</span> is such that</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5" data-startfrom="122" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 121;"><span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>opType <span class="op">===</span> <span class="st">'row'</span> <span class="op">?</span> <span class="fu">tex</span><span class="vs">`A'=EA`</span> <span class="op">:</span> <span class="fu">tex</span><span class="vs">`A'=AE.`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-5" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>As will be discussed later, we accumulate the <span class="math inline">\(E^{-1}\)</span> from the operations to compute the basechange matrix.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6" data-startfrom="127" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 126;"><span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>tex<span class="op">.</span><span class="fu">block</span><span class="vs">`E=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">mat2Tex</span>(Result[<span class="dv">1</span>])<span class="sc">}\t</span><span class="vs">ext{, and }E^{-1}=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">mat2Tex</span>(Result[<span class="dv">2</span>])<span class="sc">}</span><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-6" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>With all the background definitions and notations at our disposal to present the reduction algorithm.</p>
+</section>
+</section>
+<section id="the-reduction-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="the-reduction-algorithm">The Reduction Algorithm</h2>
+<p>Before we discuss the algorithm in detail, feel free to take a quick detour to see the <a href="../../topology/reduction-action.html"><em>reduction in action</em></a>!</p>
+<p>Given an integer matrix <span class="math inline">\(A\)</span> of any size, its reduction to the Smith normal form follows three major steps:</p>
+<section id="step-0-set-the-offset" class="level3">
+<h3 class="anchored" data-anchor-id="step-0-set-the-offset">Step 0: Set the offset</h3>
+<p>The algorithm relies on an <code>offset</code> parameter. Starting with <code>offset</code>=<span class="math inline">\(1\)</span>, the reduction process works on the original matrix, inductively, by incrementing the offset. The offset determines how much of the matrix has been already been processed; it ranges from <span class="math inline">\(1\)</span> to <span class="math inline">\(\min\{n,m\}\)</span>. When the function <code>reduce(offset)</code> is called, it assumes that the <strong>offset-block</strong>, block with the diagonal element <code>(offset,offset)</code> at its top-left corner, has to be processed, and all other rows and columns are already in good shape.</p>
+<p>To get an idea of how <code>offset</code> plays its role, try choosing an <code>offset</code> from the slider. If the reduction algorithm is called it would assume that the green elements are already processed, and the (gray) offset-block is yet to be processed.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7" data-startfrom="142" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 141;"><span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>viewof offset <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">min</span>(n<span class="op">,</span> m)]<span class="op">,</span> {</span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="vs">`offset`</span></span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-7" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8" data-startfrom="149" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 148;"><span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> container <span class="op">=</span> d3<span class="op">.</span><span class="fu">create</span>(<span class="st">"div"</span>)<span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"mat-container"</span>)<span class="op">;</span></span>
+<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a>  container</span>
+<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".row"</span>)</span>
+<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">data</span>(A)</span>
+<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">join</span>(<span class="st">"div"</span>)</span>
+<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"row"</span>)</span>
+<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"div"</span>)</span>
+<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">data</span>((d) <span class="kw">=&gt;</span> d)</span>
+<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">join</span>(<span class="st">"div"</span>)</span>
+<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"element"</span>)</span>
+<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">text</span>((d) <span class="kw">=&gt;</span> d)<span class="op">;</span></span>
+<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a>  container</span>
+<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".row"</span>)</span>
+<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> k) <span class="kw">=&gt;</span> k <span class="op">&lt;</span> offset <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".element"</span>)</span>
+<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"background"</span><span class="op">,</span> <span class="st">"#BDF3C2"</span>)<span class="op">;</span></span>
+<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a>  container</span>
+<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".row"</span>)</span>
+<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".element"</span>)</span>
+<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> k) <span class="kw">=&gt;</span> k <span class="op">&lt;</span> offset <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"background"</span><span class="op">,</span> <span class="st">"#BDF3C2"</span>)<span class="op">;</span></span>
+<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> container<span class="op">.</span><span class="fu">node</span>()<span class="op">;</span></span>
+<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-8" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p><strong>A Word of Caution:</strong> Note, however, that the green rows and columns may not be yet processed in the following demo matrix.</p>
+</section>
+<section id="step-1-find-the-best-pivot" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-find-the-best-pivot">Step 1: Find the Best Pivot</h3>
+<p>For a given <code>offset</code>, we find the best pivot: a (non-zero) element that divides all other elements of the offset-block. This step involves finding repeatedly <em>a</em> pivot, then improving it.</p>
+<p><strong>Step 1.1 Find a <code>Pivot</code> and <code>antiPivot</code>:</strong><br>
+For a given offset-block, a <code>pivot</code> is a <em>non-zero</em> element with the smallest absolute value; shown with a green border below.</p>
+<p>If the pivot-block is has all zero entries, we return the step. If not, a pivot can be found in <span class="math inline">\(O(mn)\)</span>-time.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9" data-startfrom="187" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 186;"><span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> container <span class="op">=</span> d3<span class="op">.</span><span class="fu">create</span>(<span class="st">"div"</span>)<span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"mat-container"</span>)<span class="op">;</span></span>
+<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a>  container</span>
+<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".row"</span>)</span>
+<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">data</span>(A)</span>
+<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">join</span>(<span class="st">"div"</span>)</span>
+<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"row"</span>)</span>
+<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"div"</span>)</span>
+<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">data</span>((d) <span class="kw">=&gt;</span> d)</span>
+<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">join</span>(<span class="st">"div"</span>)</span>
+<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"element"</span>)</span>
+<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">text</span>((d) <span class="kw">=&gt;</span> d)<span class="op">;</span></span>
+<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a>  container</span>
+<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".row"</span>)</span>
+<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> k) <span class="kw">=&gt;</span> k <span class="op">&lt;</span> offset <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb9-204"><a href="#cb9-204" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".element"</span>)</span>
+<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"background"</span><span class="op">,</span> <span class="st">"#BDF3C2"</span>)<span class="op">;</span></span>
+<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a>  container</span>
+<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".row"</span>)</span>
+<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".element"</span>)</span>
+<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> k) <span class="kw">=&gt;</span> k <span class="op">&lt;</span> offset <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"background"</span><span class="op">,</span> <span class="st">"#BDF3C2"</span>)<span class="op">;</span></span>
+<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a>  container</span>
+<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".row"</span>)</span>
+<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> k) <span class="kw">=&gt;</span> k <span class="op">===</span> pivot[<span class="dv">0</span>])</span>
+<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".element"</span>)</span>
+<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> k) <span class="kw">=&gt;</span> k <span class="op">===</span> pivot[<span class="dv">1</span>])</span>
+<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"border"</span><span class="op">,</span> <span class="st">"2px solid green"</span>)<span class="op">;</span></span>
+<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a>  container</span>
+<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".row"</span>)</span>
+<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> k) <span class="kw">=&gt;</span> k <span class="op">===</span> antiPivot[<span class="dv">0</span>])</span>
+<span id="cb9-222"><a href="#cb9-222" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".element"</span>)</span>
+<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> k) <span class="kw">=&gt;</span> k <span class="op">===</span> antiPivot[<span class="dv">1</span>])</span>
+<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"border"</span><span class="op">,</span> <span class="st">"2px solid red"</span>)<span class="op">;</span></span>
+<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a>  <span class="kw">yield</span> container<span class="op">.</span><span class="fu">node</span>()<span class="op">;</span></span>
+<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-9" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>We say that pivot can still be improved if, in the offset-block, there is an <code>antiPivot</code>: an element that does not divisible by the current <code>pivot</code>. In the demo, an <code>antiPivot</code> of a <code>pivot</code> is shown with a red border.</p>
+<p>If <code>antiPivot</code> does not exist, we skip Step 1.1. Otherwise, we improve the <code>pivot</code>.</p>
+<p><strong>Step 1.2 Improve the Pivot</strong></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10" data-startfrom="234" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 233;"><span id="cb10-234"><a href="#cb10-234" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-235"><a href="#cb10-235" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (antiPivot<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">0</span>)</span>
+<span id="cb10-236"><a href="#cb10-236" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">md</span><span class="vs">`For the offset-block, we see that the pivot is already the best. So, we skip this step.`</span><span class="op">;</span></span>
+<span id="cb10-237"><a href="#cb10-237" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span></span>
+<span id="cb10-238"><a href="#cb10-238" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">md</span><span class="vs">`For the offset-block, we see that the antiPivot exists. So, we take this step.`</span><span class="op">;</span></span>
+<span id="cb10-239"><a href="#cb10-239" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Let <span class="math inline">\([i,j]\)</span> and <span class="math inline">\([s,t]\)</span> be the positions of <code>pivot</code> and <code>antiPivot</code>.</p>
+<p><strong>Case I (<span class="math inline">\(i=s\)</span>):</strong> If the <code>pivot</code> and <code>antiPivot</code> are on the same row, replace the antiPivot column by <span class="math inline">\(q \times\)</span> the pivot column, where <span class="math inline">\(a_{it}= qa_{ij}+r\)</span> with <span class="math inline">\(0&lt;r&lt;a_{ij}\)</span>. As a result, <span class="math inline">\(a_{it}\)</span> becomes <span class="math inline">\(r\)</span> after the operations, and <span class="math inline">\(a_{ij}\)</span> fails to to the <code>pivot</code> for the output offset-block.</p>
+<p><strong>Case II (<span class="math inline">\(j=t\)</span>):</strong> same operation as in <strong>Case I</strong>, but for rows.</p>
+<p><strong>Case III (<span class="math inline">\(i\neq s, j\neq t\)</span>):</strong> We assume for this case that <span class="math inline">\(a_{ij}\)</span> divides all entries (of the current offset-block) in its row and column. If not, we are back to Case I.</p>
+<p>Using this assumption we can replace the antiPivot row by <span><span id="ojs-element-id-1"></span></span> the pivot row, where <span class="math inline">\(q=\frac{a_{sj}}{a_{ij}}\)</span>. After the operation, <span class="math inline">\(a_{sj}\)</span> becomes zero. If we now add replace the <span class="math inline">\(i\)</span>-th row by adding it to the <span class="math inline">\(s\)</span>-th row, <span class="math inline">\(a_{ij}\)</span> does not change, however the <span class="math inline">\((i,t)\)</span>-th becomes <span class="math inline">\(a_{it}+a_{st}\)</span>, which is not divisible by <span class="math inline">\(a_{ij}\)</span>, and we are back to Case I.</p>
+<p>Each of the above cases yields a smaller <code>pivot</code>. We go back to Step 1.2 until the best pivot is found.</p>
+</section>
+<section id="step-2-move-pivot" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-move-pivot">Step 2: Move Pivot</h3>
+<p>Once the pivot is improved, we move the pivot to the top-left corner of the offset block by at most two elementary operations involving exchanging rows / columns.</p>
+</section>
+<section id="step-3-diagonalize" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-diagonalize">Step 3: Diagonalize</h3>
+<p>Since the pivot divides all other elements in the offset block, one can find the right multiplier <span class="math inline">\(q\)</span> for each row below and each column to its right to make entries zero by a series of operations involving replacing rows and columns.</p>
+<p>We then increment the offset, and move to step 1.</p>
+<p><strong>Result:</strong></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11" data-startfrom="266" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 265;"><span id="cb11-266"><a href="#cb11-266" aria-hidden="true" tabindex="-1"></a><span class="fu">tex</span><span class="vs">`D=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">mat2Tex</span>(NF<span class="op">.</span><span class="at">D</span>)<span class="sc">}</span><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-11" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12" data-startfrom="270" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 269;"><span id="cb12-270"><a href="#cb12-270" aria-hidden="true" tabindex="-1"></a>tex<span class="op">.</span><span class="fu">block</span><span class="vs">`</span></span>
+<span id="cb12-271"><a href="#cb12-271" aria-hidden="true" tabindex="-1"></a><span class="vs">Q^{-1}=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">mat2Tex</span>(NF<span class="op">.</span><span class="at">Qinv</span>)<span class="sc">}\t</span><span class="vs">ext{, and }</span></span>
+<span id="cb12-272"><a href="#cb12-272" aria-hidden="true" tabindex="-1"></a><span class="vs">P=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">mat2Tex</span>(NF<span class="op">.</span><span class="at">P</span>)<span class="sc">}</span></span>
+<span id="cb12-273"><a href="#cb12-273" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-12" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>One can check that <span><span id="ojs-element-id-2"></span>.</span></p>
+</section>
+</section>
+<section id="change-of-bases" class="level2">
+<h2 class="anchored" data-anchor-id="change-of-bases">Change of Bases</h2>
+<p>As we know now, the algorithm works by pre or post multiplying the original matrix <span class="math inline">\(A\)</span> by an elementary matrix at each step of the reduction. Let <span class="math inline">\(E_1,E_2,\ldots,E_k\)</span> and <span class="math inline">\(F_1,F_2,\ldots,F_l\)</span> be the elementary matrices corresponding to the row and column operations performed in the increaing order of the subscript. Then the final diagonal matrix <span class="math inline">\(D\)</span> can be written as: <span class="math display">\[D=E_k\ldots E_2.E_1.A.F_1.F_2\ldots F_l=Q^{-1}AP,\]</span> where <span class="math inline">\(P=F_1.F_2\ldots F_l\)</span> and <span class="math inline">\(Q^{-1}=E_k\ldots E_2.E_1\)</span>.</p>
+<p>We note that <span class="math inline">\(P\)</span> and <span class="math inline">\(Q=E_1^{-1}E_2^{-1}\ldots E_k^{-1}\)</span> are the basechange matrices for <span class="math inline">\(\mathbb Z^m\)</span> (domain) and <span class="math inline">\(\mathbb Z^n\)</span> (co-domain), respectively.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13" data-startfrom="285" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 284;"><span id="cb13-285"><a href="#cb13-285" aria-hidden="true" tabindex="-1"></a>tex<span class="op">.</span><span class="fu">block</span><span class="vs">`</span></span>
+<span id="cb13-286"><a href="#cb13-286" aria-hidden="true" tabindex="-1"></a><span class="sc">\m</span><span class="vs">athcal{B}=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">vec2Tex</span>(B)<span class="sc">}\t</span><span class="vs">ext{, and }</span></span>
+<span id="cb13-287"><a href="#cb13-287" aria-hidden="true" tabindex="-1"></a><span class="sc">\m</span><span class="vs">athcal{B'}=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">vec2Tex</span>(B1)<span class="sc">}</span></span>
+<span id="cb13-288"><a href="#cb13-288" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-13" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Let <span class="math inline">\(\mathcal{C},\mathcal{C}'\)</span> be the new bases. We compute:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14" data-startfrom="292" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 291;"><span id="cb14-292"><a href="#cb14-292" aria-hidden="true" tabindex="-1"></a><span class="fu">tex</span><span class="vs">`</span><span class="sc">\m</span><span class="vs">athcal{C}=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">vec2Tex</span>(nj<span class="op">.</span><span class="fu">changeBasis</span>(B<span class="op">,</span> NF<span class="op">.</span><span class="at">P</span>))<span class="sc">}</span><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-14" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15" data-startfrom="296" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 295;"><span id="cb15-296"><a href="#cb15-296" aria-hidden="true" tabindex="-1"></a><span class="fu">tex</span><span class="vs">`</span><span class="sc">\m</span><span class="vs">athcal{C}'=</span><span class="sc">${</span>nj<span class="op">.</span><span class="fu">vec2Tex</span>(nj<span class="op">.</span><span class="fu">changeBasis</span>(B1<span class="op">,</span> NF<span class="op">.</span><span class="at">Q</span>))<span class="sc">}</span><span class="vs">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-15" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="discussion" class="level2">
+<h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<p>If you are too excited to explore more on the subject, the reader is advised to call on [artin]. The examples in this tutorial are produced using codes from the JS package: <a href="https://www.npmjs.com/package/@tdajs/normal-form"><span class="citation" data-cites="tdajs/normal-form">@tdajs/normal-form</span></a>. Visit the Github <a href="https://github.com/tdajs/normal-form">repo</a> for more information. Happy coding!</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16" data-startfrom="304" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 303;"><span id="cb16-304"><a href="#cb16-304" aria-hidden="true" tabindex="-1"></a>nj <span class="op">=</span> <span class="pp">require</span>(<span class="st">"https://bundle.run/@tdajs/normal-form@2.0.0"</span>)</span>
+<span id="cb16-305"><a href="#cb16-305" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> {</span>
+<span id="cb16-306"><a href="#cb16-306" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> rows <span class="op">=</span> n<span class="op">;</span> <span class="co">//d3.randomInt(1, 10)();</span></span>
+<span id="cb16-307"><a href="#cb16-307" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> cols <span class="op">=</span> m<span class="op">;</span> <span class="co">//d3.randomInt(1, 10)();</span></span>
+<span id="cb16-308"><a href="#cb16-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-309"><a href="#cb16-309" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> d3<span class="op">.</span><span class="fu">range</span>(<span class="dv">0</span><span class="op">,</span> rows)<span class="op">.</span><span class="fu">map</span>((row) <span class="kw">=&gt;</span> {</span>
+<span id="cb16-310"><a href="#cb16-310" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> d3<span class="op">.</span><span class="fu">range</span>(<span class="dv">0</span><span class="op">,</span> cols)<span class="op">.</span><span class="fu">map</span>((elm) <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="fu">randomInt</span>(<span class="op">-</span><span class="dv">5</span><span class="op">,</span> <span class="dv">5</span>)())<span class="op">;</span></span>
+<span id="cb16-311"><a href="#cb16-311" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb16-312"><a href="#cb16-312" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-313"><a href="#cb16-313" aria-hidden="true" tabindex="-1"></a>Operations <span class="op">=</span> {</span>
+<span id="cb16-314"><a href="#cb16-314" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb16-315"><a href="#cb16-315" aria-hidden="true" tabindex="-1"></a>    <span class="dt">row</span><span class="op">:</span> [</span>
+<span id="cb16-316"><a href="#cb16-316" aria-hidden="true" tabindex="-1"></a>      { <span class="dt">name</span><span class="op">:</span> <span class="st">"exchangeRows"</span><span class="op">,</span> <span class="dt">args</span><span class="op">:</span> [<span class="st">"i"</span><span class="op">,</span> <span class="st">"j"</span>] }<span class="op">,</span></span>
+<span id="cb16-317"><a href="#cb16-317" aria-hidden="true" tabindex="-1"></a>      { <span class="dt">name</span><span class="op">:</span> <span class="st">"replaceRow"</span><span class="op">,</span> <span class="dt">args</span><span class="op">:</span> [<span class="st">"i"</span><span class="op">,</span> <span class="st">"j"</span><span class="op">,</span> <span class="st">"q"</span>] }<span class="op">,</span></span>
+<span id="cb16-318"><a href="#cb16-318" aria-hidden="true" tabindex="-1"></a>      { <span class="dt">name</span><span class="op">:</span> <span class="st">"multiplyRow"</span><span class="op">,</span> <span class="dt">args</span><span class="op">:</span> [<span class="st">"i"</span>] }</span>
+<span id="cb16-319"><a href="#cb16-319" aria-hidden="true" tabindex="-1"></a>    ]<span class="op">,</span></span>
+<span id="cb16-320"><a href="#cb16-320" aria-hidden="true" tabindex="-1"></a>    <span class="dt">col</span><span class="op">:</span> [</span>
+<span id="cb16-321"><a href="#cb16-321" aria-hidden="true" tabindex="-1"></a>      { <span class="dt">name</span><span class="op">:</span> <span class="st">"exchangeCols"</span><span class="op">,</span> <span class="dt">args</span><span class="op">:</span> [<span class="st">"i"</span><span class="op">,</span> <span class="st">"j"</span>] }<span class="op">,</span></span>
+<span id="cb16-322"><a href="#cb16-322" aria-hidden="true" tabindex="-1"></a>      { <span class="dt">name</span><span class="op">:</span> <span class="st">"replaceCol"</span><span class="op">,</span> <span class="dt">args</span><span class="op">:</span> [<span class="st">"i"</span><span class="op">,</span> <span class="st">"j"</span><span class="op">,</span> <span class="st">"q"</span>] }<span class="op">,</span></span>
+<span id="cb16-323"><a href="#cb16-323" aria-hidden="true" tabindex="-1"></a>      { <span class="dt">name</span><span class="op">:</span> <span class="st">"multiplyCol"</span><span class="op">,</span> <span class="dt">args</span><span class="op">:</span> [<span class="st">"i"</span>] }</span>
+<span id="cb16-324"><a href="#cb16-324" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb16-325"><a href="#cb16-325" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb16-326"><a href="#cb16-326" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> obj<span class="op">;</span></span>
+<span id="cb16-327"><a href="#cb16-327" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-328"><a href="#cb16-328" aria-hidden="true" tabindex="-1"></a>pivot <span class="op">=</span> nj<span class="op">.</span><span class="fu">findPivot</span>(A<span class="op">,</span> offset <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb16-329"><a href="#cb16-329" aria-hidden="true" tabindex="-1"></a>antiPivot <span class="op">=</span> nj<span class="op">.</span><span class="fu">findAntiPivot</span>(pivot<span class="op">,</span> A<span class="op">,</span> offset <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb16-330"><a href="#cb16-330" aria-hidden="true" tabindex="-1"></a>Result <span class="op">=</span> {</span>
+<span id="cb16-331"><a href="#cb16-331" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (operation<span class="op">.</span><span class="fu">includes</span>(<span class="st">"exchange"</span>))</span>
+<span id="cb16-332"><a href="#cb16-332" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nj[operation](i <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> j <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> A<span class="op">,</span> { <span class="dt">copy</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span>
+<span id="cb16-333"><a href="#cb16-333" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> (operation<span class="op">.</span><span class="fu">includes</span>(<span class="st">"multiply"</span>))</span>
+<span id="cb16-334"><a href="#cb16-334" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nj[operation](i <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> q<span class="op">,</span> A<span class="op">,</span> { <span class="dt">copy</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span>
+<span id="cb16-335"><a href="#cb16-335" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">return</span> nj[operation](i <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> j <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> q<span class="op">,</span> A<span class="op">,</span> { <span class="dt">copy</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span>
+<span id="cb16-336"><a href="#cb16-336" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-337"><a href="#cb16-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-338"><a href="#cb16-338" aria-hidden="true" tabindex="-1"></a>NF <span class="op">=</span> <span class="kw">new</span> nj<span class="op">.</span><span class="fu">NormalForm</span>(A)</span>
+<span id="cb16-339"><a href="#cb16-339" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({ <span class="dt">length</span><span class="op">:</span> m })<span class="op">.</span><span class="fu">map</span>((e<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="st">"e_"</span> <span class="op">+</span> i)</span>
+<span id="cb16-340"><a href="#cb16-340" aria-hidden="true" tabindex="-1"></a>B1 <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({ <span class="dt">length</span><span class="op">:</span> n })<span class="op">.</span><span class="fu">map</span>((e<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="st">"e_"</span> <span class="op">+</span> i <span class="op">+</span> <span class="st">"'"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-6" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-7" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-8" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-16-9" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+
+
+<script type="ojs-module-contents">
+{"contents":[
+  {"methodName":"interpret","inline":"true","source":"htl.html`<span>${tex\\`q\\times\\`}</span>`", "cellName":"ojs-element-id-1"}
+,
+  {"methodName":"interpret","inline":"true","source":"htl.html`<span>${tex\\`D=Q^{-1}AP\\`}</span>`", "cellName":"ojs-element-id-2"}
+]}
+</script>
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"viewof m = Inputs.range([1, 6], {\n  value: 5,\n  step: 1,\n  label: \"Number of rows (n):\"\n})\nviewof n = Inputs.range([1, 6], {\n  value: 4,\n  step: 1,\n  label: \"Number of cols (m):\"\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"tex.block`A=${nj.mat2Tex(A)}`\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"viewof opType = Inputs.select([\"row\", \"col\"], {\n  label: \"Type of operation\"\n})\nviewof operation = Inputs.select(\n  Operations[opType].map((o) => o.name),\n  {\n    label: \"operation\"\n  }\n)\nviewof i = Inputs.range([1, opType === \"row\" ? n : m], {\n  value: 1,\n  step: 1,\n  label: tex`i`\n})\nviewof j = Inputs.range([1, opType === \"row\" ? n : m], {\n  value: 2,\n  step: 1,\n  label: tex`j`\n})\nviewof q = Inputs.range([-20, 20], {\n  value: 10,\n  step: 1,\n  label: tex`q`\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"tex.block`A'=${nj.mat2Tex(Result[0])}`\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"opType === 'row' ? tex`A'=EA` : tex`A'=AE.` \n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"tex.block`E=${nj.mat2Tex(Result[1])}\\text{, and }E^{-1}=${nj.mat2Tex(Result[2])}`\n"},{"methodName":"interpret","cellName":"ojs-cell-7","inline":false,"source":"viewof offset = Inputs.range([1, Math.min(n, m)], {\n  value: 1,\n  step: 1,\n  label: `offset`\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-8","inline":false,"source":"{\n  const container = d3.create(\"div\").attr(\"class\", \"mat-container\");\n\n  container\n    .selectAll(\".row\")\n    .data(A)\n    .join(\"div\")\n    .attr(\"class\", \"row\")\n    .selectAll(\"div\")\n    .data((d) => d)\n    .join(\"div\")\n    .attr(\"class\", \"element\")\n    .text((d) => d);\n\n  container\n    .selectAll(\".row\")\n    .filter((d, k) => k < offset - 1)\n    .selectAll(\".element\")\n    .style(\"background\", \"#BDF3C2\");\n  container\n    .selectAll(\".row\")\n    .selectAll(\".element\")\n    .filter((d, k) => k < offset - 1)\n    .style(\"background\", \"#BDF3C2\");\n  yield container.node();\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-9","inline":false,"source":"{\n  const container = d3.create(\"div\").attr(\"class\", \"mat-container\");\n\n  container\n    .selectAll(\".row\")\n    .data(A)\n    .join(\"div\")\n    .attr(\"class\", \"row\")\n    .selectAll(\"div\")\n    .data((d) => d)\n    .join(\"div\")\n    .attr(\"class\", \"element\")\n    .text((d) => d);\n\n  container\n    .selectAll(\".row\")\n    .filter((d, k) => k < offset - 1)\n    .selectAll(\".element\")\n    .style(\"background\", \"#BDF3C2\");\n  container\n    .selectAll(\".row\")\n    .selectAll(\".element\")\n    .filter((d, k) => k < offset - 1)\n    .style(\"background\", \"#BDF3C2\");\n\n  container\n    .selectAll(\".row\")\n    .filter((d, k) => k === pivot[0])\n    .selectAll(\".element\")\n    .filter((d, k) => k === pivot[1])\n    .style(\"border\", \"2px solid green\");\n\n  container\n    .selectAll(\".row\")\n    .filter((d, k) => k === antiPivot[0])\n    .selectAll(\".element\")\n    .filter((d, k) => k === antiPivot[1])\n    .style(\"border\", \"2px solid red\");\n  yield container.node();\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-10","inline":false,"source":"{\n  if (antiPivot.length === 0)\n    return md`For the offset-block, we see that the pivot is already the best. So, we skip this step.`;\n  else\n    return md`For the offset-block, we see that the antiPivot exists. So, we take this step.`;\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-11","inline":false,"source":"tex`D=${nj.mat2Tex(NF.D)}`\n"},{"methodName":"interpret","cellName":"ojs-cell-12","inline":false,"source":"tex.block`\nQ^{-1}=${nj.mat2Tex(NF.Qinv)}\\text{, and }\nP=${nj.mat2Tex(NF.P)}\n`\n"},{"methodName":"interpret","cellName":"ojs-cell-13","inline":false,"source":"tex.block`\n\\mathcal{B}=${nj.vec2Tex(B)}\\text{, and }\n\\mathcal{B'}=${nj.vec2Tex(B1)}\n`\n"},{"methodName":"interpret","cellName":"ojs-cell-14","inline":false,"source":"tex`\\mathcal{C}=${nj.vec2Tex(nj.changeBasis(B, NF.P))}`\n"},{"methodName":"interpret","cellName":"ojs-cell-15","inline":false,"source":"tex`\\mathcal{C}'=${nj.vec2Tex(nj.changeBasis(B1, NF.Q))}`\n"},{"methodName":"interpret","cellName":"ojs-cell-16","inline":false,"source":"nj = require(\"https://bundle.run/@tdajs/normal-form@2.0.0\")\nA = {\n  let rows = n; //d3.randomInt(1, 10)();\n  let cols = m; //d3.randomInt(1, 10)();\n\n  return d3.range(0, rows).map((row) => {\n    return d3.range(0, cols).map((elm) => d3.randomInt(-5, 5)());\n  });\n}\nOperations = {\n  const obj = {\n    row: [\n      { name: \"exchangeRows\", args: [\"i\", \"j\"] },\n      { name: \"replaceRow\", args: [\"i\", \"j\", \"q\"] },\n      { name: \"multiplyRow\", args: [\"i\"] }\n    ],\n    col: [\n      { name: \"exchangeCols\", args: [\"i\", \"j\"] },\n      { name: \"replaceCol\", args: [\"i\", \"j\", \"q\"] },\n      { name: \"multiplyCol\", args: [\"i\"] }\n    ]\n  };\n  return obj;\n}\npivot = nj.findPivot(A, offset - 1)\nantiPivot = nj.findAntiPivot(pivot, A, offset - 1)\nResult = {\n  if (operation.includes(\"exchange\"))\n    return nj[operation](i - 1, j - 1, A, { copy: true });\n  else if (operation.includes(\"multiply\"))\n    return nj[operation](i - 1, q, A, { copy: true });\n  else return nj[operation](i - 1, j - 1, q, A, { copy: true });\n}\n\nNF = new nj.NormalForm(A)\nB = Array.from({ length: m }).map((e, i) => \"e_\" + i)\nB1 = Array.from({ length: n }).map((e, i) => \"e_\" + i + \"'\")\n"},{"methodName":"interpretQuiet","source":"shinyInput('m')"},{"methodName":"interpretQuiet","source":"shinyInput('n')"},{"methodName":"interpretQuiet","source":"shinyInput('opType')"},{"methodName":"interpretQuiet","source":"shinyInput('operation')"},{"methodName":"interpretQuiet","source":"shinyInput('i')"},{"methodName":"interpretQuiet","source":"shinyInput('j')"},{"methodName":"interpretQuiet","source":"shinyInput('q')"},{"methodName":"interpretQuiet","source":"shinyInput('offset')"}]}
+</script>
+<script type="module">
+window._ojs.paths.runtimeToDoc = "../../topology/smith";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "../..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-right">© 2021 Sushovan Majhi 〈sush@smajhi.com〉</div>
+  </div>
+</footer>
+
+
+
+</body></html>
