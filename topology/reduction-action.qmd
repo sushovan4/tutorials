@@ -1,0 +1,172 @@
+---
+title-block-banner: true
+title: Reduction in Action
+image: smith/pic.png
+---
+
+```{ojs}
+{
+  const container = d3
+    .create("div")
+    .attr("class", "mat-container")
+    .style("margin", "auto");
+
+  container
+    .selectAll(".row")
+    .data(A)
+    .join("div")
+    .attr("class", "row")
+    .selectAll("div")
+    .data((d) => d)
+    .join("div")
+    .attr("class", "element")
+    .style("background", "#eee")
+    .style("width", "60px")
+    .style("min-height", "60px")
+    .style("padding", "5px")
+    .style("margin", "2px")
+    .style("text-align", "center")
+    .style("border-radius", "5px")
+    .style("display", "inline-block")
+    .style("border", "2px solid white")
+    .style("font-size", "15px")
+    .style("line-height", "60px")
+    .style("overflow", "hidden")
+    .text((d) => d);
+  yield container.node();
+
+  let pivot,
+    antiPivot = [];
+  let offset = 0;
+  for (let i = 0; i < steps.length; i++) {
+    let step = steps[i];
+
+    if (step.name === "offset") {
+      container
+        .selectAll(".row")
+        .filter((d, k) => k === step.offset)
+        .selectAll(".element")
+        .style("background", "#BDF3C2");
+      container
+        .selectAll(".row")
+        .selectAll(".element")
+        .filter((d, k) => k === step.offset)
+        .style("background", "#BDF3C2");
+
+      offset = step.offset + 1;
+    }
+
+    clean(offset);
+
+    if (step.pivot) {
+      pivot = [...step.pivot];
+      showPivot(pivot);
+    }
+    if (step.antiPivot) {
+      antiPivot = [...step.antiPivot];
+      showAntiPivot(antiPivot);
+    }
+
+    await Promises.delay(delay);
+
+    if (step.name === "exchangeRows") {
+      container
+        .selectAll(".row")
+        .filter((d, k) => k === step.args[0] || k === step.args[1])
+        .selectAll(".element")
+        .filter((d, k) => k >= offset)
+        .style("background", "beige");
+      await Promises.delay(delay);
+
+      pivot[0] = step.offset;
+      showPivot(pivot);
+    } else if (step.name === "exchangeCols") {
+      container
+        .selectAll(".row")
+        .filter((d, k) => k >= offset)
+        .selectAll(".element")
+        .filter((d, k) => k === step.args[0] || k === step.args[1])
+        .style("background", "beige");
+      await Promises.delay(delay);
+      pivot[1] = step.offset;
+      showPivot(pivot);
+    } else if (step.name === "replaceRow") {
+      container
+        .selectAll(".row")
+        .filter((d, k) => k === step.args[0] || k === step.args[1])
+        .selectAll(".element")
+        .filter((d, k) => k >= offset)
+        .style("background", "beige");
+      await Promises.delay(delay);
+    } else if (step.name === "replaceCol") {
+      container
+        .selectAll(".row")
+        .filter((d, k) => k >= offset)
+        .selectAll(".element")
+        .filter((d, k) => k === step.args[0] || k === step.args[1])
+        .style("background", "beige");
+      await Promises.delay(delay);
+    }
+
+    container
+      .selectAll(".row")
+      .data(step.mat)
+      .selectAll("div")
+      .data((d) => d)
+      .html((d) => d);
+  }
+  container
+    .selectAll(".row")
+    .selectAll(".element")
+    .style("border", "2px solid white");
+
+  function clean(offset) {
+    container
+      .selectAll(".row")
+      .filter((d, k) => k >= offset)
+      .selectAll(".element")
+      .filter((d, k) => k >= offset)
+      .style("background", "#eee");
+  }
+
+  function showPivot([i, j]) {
+    container
+      .selectAll(".row")
+      .selectAll(".element")
+      .style("border", "2px solid white");
+    container
+      .selectAll(".row")
+      .filter((d, k) => k === i)
+      .selectAll(".element")
+      .filter((d, k) => k === j)
+      .style("border", "3px solid green");
+  }
+  function showAntiPivot([i, j]) {
+    container
+      .selectAll(".row")
+      .filter((d, k) => k === i)
+      .selectAll(".element")
+      .filter((d, k) => k === j)
+      .style("border", "3px solid red");
+  }
+}
+```
+For more details, see: [Normal Form](smith/index.qmd).
+```{ojs}
+delay = 300
+
+A = {
+  let rows = 7; //d3.randomInt(1, 10)();
+  let cols = 7; //d3.randomInt(1, 10)();
+
+  return d3.range(0, rows).map((row) => {
+    return d3.range(0, cols).map((elm) => d3.randomInt(-3, 3)());
+  });
+}
+
+nf = require("https://bundle.run/@tdajs/normal-form@2.0.0")
+
+steps = new nf.NormalForm(A, {
+  recordSteps: true
+}).steps
+```

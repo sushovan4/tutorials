@@ -1,0 +1,259 @@
+---
+title: Order Statistics
+title-block-banner: order.svg
+title-block-banner-color: white
+subtitle: Quantiles of a Random Sample
+author: Sushovan Majhi
+date: today
+draft: false
+image: order.png
+categories: [Statistics, Data Science]
+code-fold: false
+execute: 
+  echo: false
+bibliography: references.bib
+---
+# Introduction
+In statistics, a one-value summary of a random sample is called a *statistic*. Mean, standard deviation, median, min, max of a sample 
+are some of the commonly used statistics. While the computation of mean and standard deviation use the actual sample values---min, max, and median are computed using only their relative positions or *order*. When a sample is sorted in non-decreasing order, the first and the last positions are the min and the max, and the middle position is the median. The notion of order statistics generalizes such summaries of a sample.
+
+Since this is the most prevalent use case, we always consider a random sample $X_1, X_2,\ldots, X_n$ to be *i.i.d.* from a *continuous* random variable $X$ following a common probability distribution $\mathbb F(x)=\mathbb P(X\leq x)$. The *ordered sample* is denoted by $X_{(1)}\leq X_{(2)}\leq\ldots\leq X_{(n)}$, and $X_{(k)}$ is called the $k$th-**order statistic** for any $1\leq k\leq n$. 
+
+So, the $1$st and the $n$th order statistics are simply the sample min and smaple max, respectively. Moreover, $X_{\left(\frac{n-1}{2}\right)}$ is the sample median if $n$ is odd. 
+
+Before exploring the sampling distributions of the order statistics in full generality, we start playing around with two very special order statistics---min and max.
+
+# Min and Max Statistics
+In our notations, $X_{(1)}$ and $X_{(n)}$ are the sample min and max, respectively. For simplicity of notation, however, we let $U$ and $V$ denote the min and the max. 
+
+## Experimenting with the Extrema
+Let us consider a random sample of size $n=10$ from the uniform distribution over the interval $[0,1]$. The sampled data-points are shown in @fig-1, along with the min (in green) and max (in red).  
+```{ojs}
+//| label: fig-1
+//| fig-cap: A random sample of size $10$ from $\mathrm{unif}([0,1])$. The red and blue points denote the min and the max, respectively.
+Plot.plot({
+  height: 70,
+  x: { domain: [0,1] } ,
+  y: { ticks: 0 },
+  marks: [
+    Plot.ruleY([0], { stroke: 'lightgray' }),
+    Plot.dot({ length: 10 }, {
+      y: Array.from({ length: 10 }).fill(0),
+      x: d3.sort(Array.from({ length: 10 }, d3.randomUniform()) ),
+      fill: (d, i) => {
+        if(i===0)
+          return 'green'
+        if(i===9)
+          return 'red'
+        else
+          return 'lightgray'
+      }
+    })
+  ]
+})
+```
+In this *random instance* of the sample, the sample min (equivalently max) is not very far from $0$ (equaivalently $1$). We wonder if this is generally the case across random instances. It would definitely be counter-intuitive if it turns out that way. In our setup, each sample point $X_i$ takes on a value in $[0,1]$, without any unfair bias in favor of a particular point---moreover, $X_i$ is oblivious to the other draws $X_j$ for $i\neq j$. So, it is most natural to think any point in the interval is equally-likely to be the min and max. In order to put this intuition to test, we take $m=5$ random samples. Each sample is drawn on a line as before, and the samples are stacked vertically in @fig-2.
+```{ojs}
+//| label: fig-2
+//| fig-cap: Samples are drawn on the horizontal lines, the red minimums and maximums are again shown in green and red.
+Plot.plot({
+  height: 250,
+  marginLeft: 50,
+  x: { label: null, domain: [0,1]},
+  y: { label: null, tickRotate: 30, line: true, grid: true },
+  marks: [
+    Plot.dot( rUnif(5, 10), {
+      x: 'X', 
+      y: (d) => "sample " + d.sample ,
+      fill: (d) => {
+        if(d.k === 1)
+          return 'green'
+        if(d.k === 10)
+          return 'red'
+        else
+          return 'lightgray'
+      }
+    })
+  ]
+});
+```
+As it turns out, sample mean $U$ has a tendency to remain to close $0$ and 
+sample max $V$ has a tendency to remain to close $1$! More specifically, for a sample of size $n$ from uniform $[0,1]$ we have
+$$E[U]=\frac{1}{n+1}\text{ and }E[V]=\frac{n}{n+1}.$$
+
+## Probability Distributions of the Extrema
+Let us try to prove a little more general result. We compute now the density of the extrema $U$ and $V$ of a sample from a general probability distribution.
+
+:::{#thm-1}
+### Density Function of $V$
+If $X_1, X_2, \ldots, X_n$ are independent random variables with the common CDF $F$ and density $f$, then the density of $V$ is $$f_V(v)=nf(v)[F(v)]^{n-1}.$$
+:::
+
+:::{.solution}
+We first compute the CDF $F_V(v)$ of $V$, then differentiate it to get the PDF.
+In order to compute $F_V(v)$, we note that $V\leq v$ *if and only if* every $X_i\leq v$. So,
+\begin{align}
+F_V(v) &=\mathbb P(V\leq v) \\
+&=\mathbb P(X_1\leq v, X_2\leq v, \ldots, X_n\leq v) \\
+&=\mathbb P(X_1\leq v)\mathbb P(X_2\leq v)\ldots\mathbb P(X_n\leq v) \\
+&=[F(v)]^n.
+\end{align}
+Differentiating we get the density
+$$
+\begin{align}
+f_V(v) &=\frac{d}{dv}[F(v)]^n \\
+&=n[F(v)]^{n-1}\frac{dF(v)}{dv} \\
+&=n[F(v)]^{n-1}f(v).
+\end{align}
+$$
+:::
+
+:::{#exr-1}
+Prove that, under the conditions of @thm-1, the density of $U$ is 
+$$f_U(u)=nf(u)[1-F(u)]^{n-1}.$$
+:::
+
+# Order Statistics
+:::{#thm-2}
+The density of $X_{(k)}$, the $k$th-order statistic, is
+$$
+f_k(x) = \frac{n!}{(k-1)!(n-k)!}f(x)F^{k-1}(x)[1-F(x)]^{n-k}.
+$$
+:::
+
+:::{.proof}
+As before, we compute the CDF, $F_k(x)=\mathbb P(X_{(k)}\leq x)$, first then differentiate it to find the density. We note that $X_{(k)}\leq x$ *if and only if* **at least** $k$ many sample points ($X_i$s) are not greater than $x$. Consequently, if denote by $Z$ the number of $X_i$s that are not greater than this fixed number $x$, the event that $X_{(k)}\leq x$ is equaivalent to having $Z\geq k$. So,
+$$
+F_k(x)=\mathbb P(X_{(k)}\leq x)=\mathbb P(Z\geq k)
+$$
+Since $X_i$s are independent, we also note that $Z$ is a random variable that follows the Binomial distribution distribution with parameters $n$
+and $p=\mathbb P(X_i\leq x)=F(x)$. Therefore,
+\begin{align}
+F_k(x) &= \sum\limits_{i=k}^n{n \choose i}p^i(1-p)^{n-i} \\
+&= \sum\limits_{i=k}^n{n \choose i}F^i(x)[1-F(x)]^{n-i}
+\end{align}
+Now, we differentiate $F_k(x)$  to find the density
+$$
+\begin{align}
+f_k(x) &= \frac{d}{dx}F_k(x) \\
+&=\frac{d}{dx}\left[\sum\limits_{i=k}^n{n \choose i}F^i(x)[1-F(x)]^{n-i}\right] \\
+&=\sum\limits_{i=k}^n{n \choose i}\frac{d}{dx}\bigg[F^i(x)[1-F(x)]^{n-i}\bigg] \\
+&=\sum\limits_{i=k}^n{n \choose i}\frac{d}{dx}\bigg[F^i(x)[1-F(x)]^{n-i}\bigg] 
+\end{align}
+$$
+Using the chain rule, we get 
+$$
+\begin{align}
+f_k(x)&=\sum\limits_{i=k}^n{n \choose i}\bigg[iF^{i-1}(x)\frac{dF(x)}{dx}[1-F(x)]^{n-i} \\ &\quad+F^i(x)(n-i)[1-F(x)]^{n-i-1}\frac{d[1-F_k(x)]}{dx}\bigg] \\
+&=\sum\limits_{i=k}^n{n \choose i}iF^{i-1}(x)f(x)[1-F(x)]^{n-i} \\
+&\quad-\sum\limits_{i=k}^n{n \choose i}(n-i)F^i(x)[1-F(x)]^{n-i-1}f(x)
+\end{align}
+$$
+Here, we the following two identities given as an exercise.
+
+So,
+$$
+\begin{align}
+f_k(x)&=\sum\limits_{i=k}^n \frac{n!}{(i-1)!(n-i)!} F^{i-1}(x)f(x)[1-F(x)]^{n-i} \\
+&\quad-\sum\limits_{i=k}^n\frac{n!}{i!(n-i-1)!} F^i(x)[1-F(x)]^{n-i-1}f(x) \\
+&=\sum\limits_{i=k}^n\bigg[\frac{n!}{(i-1)!(n-i)!} F^{i-1}(x)f(x)[1-F(x)]^{n-i} \\
+&\quad-\frac{n!}{i!(n-i-1)!} F^i(x)[1-F(x)]^{n-i-1}f(x)\bigg] \\
+\end{align}
+$$
+This is a [telescoping series](https://en.wikipedia.org/wiki/Telescoping_series). Therefore, only the first term survives
+$$
+f_k(x)=\frac{n!}{(k-1)!(n-k)!}f(x)F^{k-1}(x)[1-F(x)]^{n-k}.
+$$
+:::
+
+:::{#exr-2}
+Prove that $${n \choose i}i=\frac{n!}{(i-1)!(n-i)!}$$ and 
+$${n \choose i}(n-i)=\frac{n!}{i!(n-i-1)!}.$$
+:::
+
+
+## The Order Statistics of Uniform $[0,1]$
+We can now apply the density obtained in @thm-2 to compute the expectations of the order statistics for a sample of size $n$ from uniform $[0,1]$. In this case,
+$$
+f(x)=\begin{cases}
+1,&0\leq x\leq 1 \\
+0,&\text{ otherwise}
+\end{cases}
+$$
+And, 
+$$
+F(x)=\begin{cases}
+0,&x<0 \\
+x,&0\leq x\leq 1\\
+1,&x>1
+\end{cases}
+$$
+As a result, the density of the $k$th-order statistic is
+$$
+f_k(x)=\begin{cases}
+\frac{n!}{(k-1)!(n-k)!}x^{k-1}(1-x)^{n-k},& 0\leq x\leq 1 \\ 
+0,&\text{ otherwise}
+\end{cases}
+$$
+The expectation is
+$$
+\begin{align}
+E[X_{(k)}] &=\int_0^1x\cdot\frac{n!}{(k-1)!(n-k)!}x^{k-1}(1-x)^{n-k}dx \\
+&=\frac{n!}{(k-1)!(n-k)!}\int_0^1x^k(1-x)^{n-k}dx.
+\end{align}
+$$
+The form of the integral is known as the [Beta function](https://en.wikipedia.org/wiki/Beta_function). Using its relation to binomial coefficients, we can then write
+$$
+\begin{align}
+E[X_{(k)}] 
+&=\frac{n!}{(k-1)!(n-k)!}\int_0^1x^k(1-x)^{n-k}dx \\ 
+&=\frac{n!}{(k-1)!(n-k)!}\cdot\frac{k!(n-k)!}{(k+n-k+1)!} \\
+&=\frac{k}{n+1}.
+\end{align}
+$$
+The *typical* positions of random draws (when sorted) are equally spaced over $[0,1]$ as evident in the following plot.
+
+```{ojs}
+//| code-fold: false
+viewof n = slider({ 
+          min: 0,
+          max: 200,
+          step: 1, 
+          label: `n` 
+});
+viewof m = slider({     min: 0,
+          max: 200,step: 1, label: tex`m` });
+```
+
+```{ojs}
+//| code-fold: false
+//| echo: false
+d = rUnif(m, n);
+Plot.plot({
+  y: { grid: true },
+  marks: [
+  Plot.dot(d,{ x: 'X', y: 'sample', fill: 'k'})
+  //Plot.ruleX(Array.from({ length: n }, (d, k) => ({ k: k+1, x: (k+1)/(n+1) })),     //{ x: 'x', stroke: 'k' })
+  ]
+});
+```
+
+# Conclusion
+In addition to the marginal densities of the order statistics, one can also compute the joint distribution. As one can imagine, the computation gets very complicated. Among other applications, order statiscs are used to define *quantiles of a sample*, which provide an extremely useful graphical tool called qq-plots.
+
+
+```{ojs}
+import {slider} from "@jashkenas/inputs"
+```
+
+```{ojs}
+rUnif = function(m, n) {
+  let out = [];
+  for(let i = 1; i <= m; i++) {
+    let d = Array.from({ length: n },  d3.randomUniform( ) )
+        .sort( (a,b) => a - b ).map( (X, k) => ({X, k: k+1, sample: i}) );
+    out.push(...d);
+  }
+  return out;
+}
+```

@@ -1,0 +1,16 @@
+```{=html}
+<ul class="timeline">
+<% for (const item of items) { %>
+  <li class="item">
+  <div class="year"><%= item.year %></div><b><%= item.title %></b>.
+  <%= item.venue %>
+  <% if (item.with) { %><br/>With: <%= item.with %><% } %>
+  <% if (item.links) { %><br/>Links: 
+    <% for (const [venue, link] of Object.entries(item.links)) { %>
+    [<a href="<%- link %>"><%= venue %></a>]&nbsp;
+    <% } %>
+  <% } %>
+  </li>
+<% } %>
+</ul>
+```

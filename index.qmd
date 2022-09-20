@@ -1,0 +1,40 @@
+---
+title: Tutorials
+subtitle: From time to time, I get intrigued by different topics in math, coding, data science, software, and subjects that no one else on Earth would care about. As soon as I start to dig in and things suddenly get little beyond my apprehension, posting here helps me wrap my head around it. This collection—if nothing else—helps me now to organize my thoughts, and would help me one day realize how I wasted my days!
+listing: 
+  - id: topology
+    contents: 
+      - topology/*.qmd 
+      - topology/*/index.qmd
+    type: grid
+    fields: [title, image, date]
+    categories: true
+  - id: data-science
+    contents: 
+      - data-science/*.qmd
+      - data-science/*/index.qmd
+    type: grid
+    fields: [title, image, date]
+    grid-item-border: true
+    categories: true
+  - id: miscellaneous
+    contents: 
+      - miscellaneous/*.qmd
+      - miscellaneous/*/index.qmd
+    type: grid
+    fields: [image, date, title]
+    grid-item-border: true
+    categories: true
+---
+
+## Topological Data Analysis
+::: {#topology}
+:::
+
+## Statistics and Data Analysis
+:::{#data-science}
+:::
+
+## Miscellaneous
+:::{#miscellaneous}
+:::

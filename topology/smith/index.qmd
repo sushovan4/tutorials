@@ -1,0 +1,341 @@
+---
+title: Smith Normal Form
+subtitle: Interactive Tutorial on the Smith Normal Form
+sidebar: false
+title-block-banner: pic.png
+author: Sushovan Majhi
+date: 08-01-2021
+image: pic.png
+css: style.css
+---
+## Introduction
+Matrix reduction plays a fundamental role in the study of vector spaces and linear transformations. Reduction of a matrix to a *canonical* or [*normal form*](https://en.wikipedia.org/wiki/Canonical_form) finds its use in almost all applied fields of science. While there are many different normal forms a matrix can be reduced to, a normal form is usually the product of much simpler and well-understood (e.g., diagonal, upper/lower triangular, etc) matrices. Since, the reduction process faithfully carries most of the *nice* properties of the original matrix, one can use a normal form to *infer* some of those properties from matrices with relatively simple structure.
+
+The choice of the normal form can sometimes be demanded by a particular application, or be limited by the algebraic operations one is allowed to perform on the entries of the original matrix. Today we consider, for reduction, only $\mathbb Z$-matrices, i.e., matrices that are allowed to have only integer entries. As a consequence, the only permitted operations on the entries of such a matrix are *addition* and *multiplication*—but not *division*. We denote by $\mathcal{M}_{n,m}(\mathbb Z)$ the set of all integer matrices with $n$ rows and $m$ columns. In the special case of square matrices ($m=n$), we simply call it $\mathcal{M}_{m}(\mathbb Z)$ or $\mathcal{M}_{n}(\mathbb Z)$. Note that the identity matrix, $I_{m}$, of dimension $m$ is a $\mathbb Z$-matrix, i.e., $I_m\in\mathcal{M}_{m}(\mathbb Z)$.
+
+### Permitted Matrix Operations
+Although our hands are now tied by the restriction on the operations allowed on a matrix $A\in\mathcal{M}_{n,m}(\mathbb Z)$, we can still follow the usual definitions of matrix **addition**, **subtraction**, and **multiplication**— also **determinant** and **inverse** of a square matrix. For a square matrix $A\in\mathcal{M}_{n}(\mathbb Z)$, its determinant is defined the [usual way](https://en.wikipedia.org/wiki/Leibniz_formula_for_determinants). Also, $A$ is said to have an inverse $B\in\mathcal{M}_{n}(\mathbb Z)$ if $AB=BA=I_n$. The set of all invertible (square) matrices of dimension $n$ is denoted by $GL_{n}(\mathbb Z)$.
+
+### Smith Normal Form
+Given an $A\in\mathcal{M}_{n,m}(\mathbb Z)$, we seek invertible matrices $P\in GL_{m}(\mathbb Z)$ and $Q\in GL_{n}(\mathbb Z)$ such that
+$D=Q^{-1}AP,$
+where $D$ is an $n\times m$ diagonal integer matrix:
+$$
+\newcommand\bigzero{\makebox(0,0){\text{\huge0}}}
+\begin{pmatrix}
+\begin{array}{c:c}
+  \begin{matrix}
+    d_1 & 0 & \ldots & 0 \\
+    0 & d_2 & \ldots & 0\\
+    0 & \ldots & \ldots & 0 \\
+    0 & \ldots & 0 & d_k \\
+  \end{matrix}
+  & {\huge0}_{k,m-k} \\
+  \hdashline \\
+  {\huge0}_{n-k,k} & {\huge0}_{n-k,m-k}
+\end{array}
+\end{pmatrix}
+$$
+with $d_i\geq0$ for all $i=1, 2, \ldots, k$ and $d_1| d_2| \ldots | d_k$.
+
+**Note:**
+- the diagonal matrix $D$ always exists, as we allow it to be a zero matrix; it is also *unique*. 
+- $P,Q$ may not, however, be unique [artin].
+- if $A$ is viewed as the matrix of a linear transformation $T:G_1\to G_2$ between two [finitely-generated free abelian groups](../abelian-groups/index.qmd), then $P$ and $Q$ are the *basechange matrices* for $G_1$ and $G_2$, respectively.
+
+### Application
+Unlike the other popular canonical forms—e.g., the Jordan normal form for matrices over an *algebraically-closed* field—the Smith normal form is particularly relevant in the context of $\mathbb Z$-modules, more generally $R$-modules [artin]. In the field of combinatorial topology, the reduction to Smith normal form facilitates the computation of the [homology groups](https://en.wikipedia.org/wiki/Homology_(mathematics)) of finte [simplicial complexes](https://en.wikipedia.org/wiki/Simplicial_complex) [Munkres84]. 
+
+## Elementary Operations
+As stated above without a proof that the reduction of an integer matrix to a Smith normal form always exists. We now present the steps one can perform to decompose a given matrix. The basis of the reduction process involves three **elementary operations**. We invoke them repeatedly on the original matrix in the right order. We are going to use three elementary *row operations* and three corresonding *column operations*. 
+
+### Elementary Matrices
+Each of the following row (and column) operations can also be described as pre (and post) multiplication by an **elementary matrix**. For each elementary operation, there is an associated elementary matrix, which is obtained by performing the same operation on the identity matrix of the right size.
+
+### Row Operations
+We first define and then demonstrate the elementary row operations. The outcome $A'$ of each row operation on $A$ is a *pre*-multiplication of $A$ by an elementary matrix $E$, i.e., $A'=EA$. The three types of row operations are as follows:
+
+- Multiply the $i$-th row by $-1$
+- Exchange the $i$-th and $j$-th row
+- Replace the $i$-th row with the row plus $q$ times the $j$-th row ($i\neq j, q\neq 0$) 
+
+### Column Operations
+The outcome $A'$ of each column operation on $A$ is *post*-multiplication of $A$ by an elementary matrix $E$, i.e., $A'=AE$. The three types of column operations are as follows:
+
+- Multiply the $i$-th column by $-1$
+- Exchange the $i$-th and $j$-th column
+- Replace $i$-th column with the column plus $q$ times the $j$-th column ($i\neq j, q\neq 0$)
+
+### Demo  
+The operations are best understood when demonstrated on an example matrix. To that end, we first generate a random matrix $A$ with integer (between $-5$ and $5$) entries by choosing the number of rows and columns using the sliders. 
+```{ojs}
+viewof m = Inputs.range([1, 6], {
+  value: 5,
+  step: 1,
+  label: "Number of rows (n):"
+})
+viewof n = Inputs.range([1, 6], {
+  value: 4,
+  step: 1,
+  label: "Number of cols (m):"
+})
+```
+
+If you do not like the random matrix, try fiddling with the above sliders to generate a new one!
+```{ojs}
+tex.block`A=${nj.mat2Tex(A)}`
+```
+
+**See for yourself:**
+From the dropdown below choose the operation type (row/column) and an operation. Also, set the values of the arguemts for the operations chosen, using the sliders. 
+```{ojs}
+viewof opType = Inputs.select(["row", "col"], {
+  label: "Type of operation"
+})
+viewof operation = Inputs.select(
+  Operations[opType].map((o) => o.name),
+  {
+    label: "operation"
+  }
+)
+viewof i = Inputs.range([1, opType === "row" ? n : m], {
+  value: 1,
+  step: 1,
+  label: tex`i`
+})
+viewof j = Inputs.range([1, opType === "row" ? n : m], {
+  value: 2,
+  step: 1,
+  label: tex`j`
+})
+viewof q = Inputs.range([-20, 20], {
+  value: 10,
+  step: 1,
+  label: tex`q`
+})
+```
+Here is the outcome matrix:
+```{ojs}
+tex.block`A'=${nj.mat2Tex(Result[0])}`
+```
+The corresponding elementary matrix $E$ is such that 
+```{ojs}
+opType === 'row' ? tex`A'=EA` : tex`A'=AE.` 
+```
+
+As will be discussed later, we accumulate the $E^{-1}$ from the operations to compute the basechange matrix.
+```{ojs}
+tex.block`E=${nj.mat2Tex(Result[1])}\text{, and }E^{-1}=${nj.mat2Tex(Result[2])}`
+```
+With all the background definitions and notations at our disposal to present the reduction algorithm.
+
+
+## The Reduction Algorithm
+Before we discuss the algorithm in detail, feel free to take a quick detour to see the [*reduction in action*](/topology/reduction-action.qmd)!
+
+Given an integer matrix $A$ of any size, its reduction to the Smith normal form follows three major steps:
+
+### Step 0: Set the offset
+The algorithm relies on an `offset` parameter. Starting with `offset`=$1$, the reduction process works on the original matrix, inductively, by incrementing the offset. The offset determines how much of the matrix has been already been processed; it ranges from $1$ to $\min\{n,m\}$. When the function `reduce(offset)` is called, it assumes that the **offset-block**, block with the diagonal element `(offset,offset)` at its top-left corner, has to be processed, and all other rows and columns are already in good shape. 
+
+To get an idea of how `offset` plays its role, try choosing an `offset` from the slider. If the reduction algorithm is called it would assume that the green elements are already processed, and the (gray) offset-block is yet to be processed.  
+```{ojs}
+viewof offset = Inputs.range([1, Math.min(n, m)], {
+  value: 1,
+  step: 1,
+  label: `offset`
+})
+```
+```{ojs}
+{
+  const container = d3.create("div").attr("class", "mat-container");
+
+  container
+    .selectAll(".row")
+    .data(A)
+    .join("div")
+    .attr("class", "row")
+    .selectAll("div")
+    .data((d) => d)
+    .join("div")
+    .attr("class", "element")
+    .text((d) => d);
+
+  container
+    .selectAll(".row")
+    .filter((d, k) => k < offset - 1)
+    .selectAll(".element")
+    .style("background", "#BDF3C2");
+  container
+    .selectAll(".row")
+    .selectAll(".element")
+    .filter((d, k) => k < offset - 1)
+    .style("background", "#BDF3C2");
+  yield container.node();
+}
+```
+**A Word of Caution:** Note, however, that the green rows and columns may not be yet processed in the following demo matrix.
+
+### Step 1: Find the Best Pivot
+For a given `offset`, we find the best pivot: a (non-zero) element that divides all other elements of the offset-block. This step involves finding repeatedly *a* pivot, then improving it. 
+
+**Step 1.1 Find a `Pivot` and `antiPivot`:**   
+For a given offset-block, a `pivot` is a *non-zero* element with the smallest absolute value; shown with a green border below. 
+
+If the pivot-block is has all zero entries, we return the step. If not, a pivot can be found in $O(mn)$-time.
+
+```{ojs}
+{
+  const container = d3.create("div").attr("class", "mat-container");
+
+  container
+    .selectAll(".row")
+    .data(A)
+    .join("div")
+    .attr("class", "row")
+    .selectAll("div")
+    .data((d) => d)
+    .join("div")
+    .attr("class", "element")
+    .text((d) => d);
+
+  container
+    .selectAll(".row")
+    .filter((d, k) => k < offset - 1)
+    .selectAll(".element")
+    .style("background", "#BDF3C2");
+  container
+    .selectAll(".row")
+    .selectAll(".element")
+    .filter((d, k) => k < offset - 1)
+    .style("background", "#BDF3C2");
+
+  container
+    .selectAll(".row")
+    .filter((d, k) => k === pivot[0])
+    .selectAll(".element")
+    .filter((d, k) => k === pivot[1])
+    .style("border", "2px solid green");
+
+  container
+    .selectAll(".row")
+    .filter((d, k) => k === antiPivot[0])
+    .selectAll(".element")
+    .filter((d, k) => k === antiPivot[1])
+    .style("border", "2px solid red");
+  yield container.node();
+}
+```
+We say that pivot can still be improved if, in the offset-block, there is an `antiPivot`: an element that does not divisible by the current `pivot`. In the demo, an `antiPivot` of a `pivot` is shown with a red border.
+
+If `antiPivot` does not exist, we skip Step 1.1. Otherwise, we improve the `pivot`.
+
+**Step 1.2 Improve the Pivot**
+```{ojs}
+{
+  if (antiPivot.length === 0)
+    return md`For the offset-block, we see that the pivot is already the best. So, we skip this step.`;
+  else
+    return md`For the offset-block, we see that the antiPivot exists. So, we take this step.`;
+}
+```
+Let $[i,j]$ and $[s,t]$ be the positions of `pivot` and `antiPivot`.
+
+**Case I ($i=s$):** 
+If the `pivot` and `antiPivot` are on the same row, replace the antiPivot column by $q \times$ the pivot column, where $a_{it}= qa_{ij}+r$ with $0<r<a_{ij}$. As a result, $a_{it}$ becomes $r$ after the operations, and $a_{ij}$ fails to to the `pivot` for the output offset-block.  
+
+**Case II ($j=t$):** 
+same operation as in **Case I**, but for rows.
+
+**Case III ($i\neq s, j\neq t$):** 
+We assume for this case that $a_{ij}$ divides all entries (of the current offset-block) in its row and column. If not, we are back to Case I.
+
+Using this assumption we can replace the antiPivot row by ${tex`q\times`} the pivot row, where $q=\frac{a_{sj}}{a_{ij}}$. After the operation, $a_{sj}$ becomes zero. If we now add replace the $i$-th row by adding it to the $s$-th row, $a_{ij}$ does not change, however the $(i,t)$-th becomes $a_{it}+a_{st}$, which is not divisible by $a_{ij}$, and we are back to Case I.
+
+Each of the above cases yields a smaller `pivot`. We go back to Step 1.2 until the best pivot is found.
+
+### Step 2: Move Pivot
+Once the pivot is improved, we move the pivot to the top-left corner of the offset block by at most two elementary operations involving exchanging rows / columns.
+
+### Step 3: Diagonalize
+Since the pivot divides all other elements in the offset block, one can find the right multiplier $q$ for each row below and each column to its right to make entries zero by a series of operations involving replacing rows and columns.
+
+We then increment the offset, and move to step 1.
+
+**Result:**
+```{ojs}
+tex`D=${nj.mat2Tex(NF.D)}`
+```
+
+```{ojs}
+tex.block`
+Q^{-1}=${nj.mat2Tex(NF.Qinv)}\text{, and }
+P=${nj.mat2Tex(NF.P)}
+`
+```
+One can check that ${tex`D=Q^{-1}AP`}.
+
+## Change of Bases
+As we know now, the algorithm works by pre or post multiplying the original matrix $A$ by an elementary matrix at each step of the reduction. Let $E_1,E_2,\ldots,E_k$ and $F_1,F_2,\ldots,F_l$ be the elementary matrices corresponding to the row and column operations performed in the increaing order of the subscript. Then the final diagonal matrix $D$ can be written as:
+$$D=E_k\ldots E_2.E_1.A.F_1.F_2\ldots F_l=Q^{-1}AP,$$
+where $P=F_1.F_2\ldots F_l$ and $Q^{-1}=E_k\ldots E_2.E_1$.
+
+We note that $P$ and $Q=E_1^{-1}E_2^{-1}\ldots E_k^{-1}$ are the basechange matrices for $\mathbb Z^m$ (domain) and $\mathbb Z^n$ (co-domain), respectively.
+
+```{ojs}
+tex.block`
+\mathcal{B}=${nj.vec2Tex(B)}\text{, and }
+\mathcal{B'}=${nj.vec2Tex(B1)}
+`
+```
+Let $\mathcal{C},\mathcal{C}'$ be the new bases. We compute:
+```{ojs}
+tex`\mathcal{C}=${nj.vec2Tex(nj.changeBasis(B, NF.P))}`
+```
+
+```{ojs}
+tex`\mathcal{C}'=${nj.vec2Tex(nj.changeBasis(B1, NF.Q))}`
+```
+
+## Discussion
+If you are too excited to explore more on the subject, the reader is advised to call on [artin]. The examples in this tutorial are produced using codes from the JS package: [@tdajs/normal-form](https://www.npmjs.com/package/@tdajs/normal-form). Visit the Github [repo](https://github.com/tdajs/normal-form) for more information. Happy coding!
+
+```{ojs}
+nj = require("https://bundle.run/@tdajs/normal-form@2.0.0")
+A = {
+  let rows = n; //d3.randomInt(1, 10)();
+  let cols = m; //d3.randomInt(1, 10)();
+
+  return d3.range(0, rows).map((row) => {
+    return d3.range(0, cols).map((elm) => d3.randomInt(-5, 5)());
+  });
+}
+Operations = {
+  const obj = {
+    row: [
+      { name: "exchangeRows", args: ["i", "j"] },
+      { name: "replaceRow", args: ["i", "j", "q"] },
+      { name: "multiplyRow", args: ["i"] }
+    ],
+    col: [
+      { name: "exchangeCols", args: ["i", "j"] },
+      { name: "replaceCol", args: ["i", "j", "q"] },
+      { name: "multiplyCol", args: ["i"] }
+    ]
+  };
+  return obj;
+}
+pivot = nj.findPivot(A, offset - 1)
+antiPivot = nj.findAntiPivot(pivot, A, offset - 1)
+Result = {
+  if (operation.includes("exchange"))
+    return nj[operation](i - 1, j - 1, A, { copy: true });
+  else if (operation.includes("multiply"))
+    return nj[operation](i - 1, q, A, { copy: true });
+  else return nj[operation](i - 1, j - 1, q, A, { copy: true });
+}
+
+NF = new nj.NormalForm(A)
+B = Array.from({ length: m }).map((e, i) => "e_" + i)
+B1 = Array.from({ length: n }).map((e, i) => "e_" + i + "'")
+```

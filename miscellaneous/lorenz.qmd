@@ -1,0 +1,126 @@
+---
+title: Lorenz System
+subtitle: Strange attractor
+date: 09/12/2022
+code-fold: false
+image: lorenz.jpg
+author: Sushovan Majhi
+title-block-banner: true
+---
+## The System
+Lorenz system is a system of (non-linear) ordinary differential equations.
+\begin{aligned}
+\dot{x} &= \sigma(y-x)\\
+\dot{y} &= x(\rho-z)-y\\
+\dot{z} &= xy-\beta z
+\end{aligned}
+
+Here $\sigma,\rho,\text{ and }\beta$ are system parameters.
+
+## Evolution Projected on Y-Z Plane
+```{ojs}
+//| echo: false
+
+Plot.plot({
+  height: 500,
+  widht: 500,
+  x: {
+    domain: [-30, 30],
+    grid: true
+  },
+  y: {
+    domain: [0, 50],
+    grid: true
+  },
+  marks: [
+    Plot.line(lorenzData.slice(0, n), {
+      x: "y",
+      y: "z",
+      strokeWidth: 0.5,
+      stroke: "red"
+    }),
+    Plot.ruleX([0]),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+## Time-series from the Z-axis
+```{ojs}
+//| echo: false
+Plot.plot({
+  x: {
+    domain: [0, 4000]
+  },
+  marks: [
+    Plot.line(lorenzData.slice(0, n), {
+      x: "n",
+      y: "z"
+    }),
+    Plot.ruleX([1500, 3500], { stroke: "red" }),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+## Takens' Embedding
+```{ojs}
+//| echo: false
+viewof delay = Inputs.number({ value: 7, label: tex`Delay\ (\tau)` })
+Plot.plot({
+  marks: [
+    Plot.dot(
+      delayTS(
+        lorenzData.map((d) => d.x),
+        delay
+      ).slice(0, n),
+      {
+        stroke: "red",
+        r: 1
+      }
+    )
+  ]
+})
+```
+
+
+```{ojs}
+//| echo: false
+delayTS = function (ts, delay = 1, dim = 2) {
+  return ts.map((d, i) => {
+    const out = [];
+    for (let j = 0; j < dim; j++) out.push(ts[i + j * delay]);
+    return out;
+  });
+}
+
+lorenz = function (
+  [x, y, z] = [0, 0, 0],
+  n = 100,
+  { sigma = 10, r = 28, b = 8 / 3 } = {}
+) {
+  let F = function (t, [x, y, z]) {
+    return [sigma * (y - x), r * x - x * z - y, x * y - b * z];
+  };
+
+  let s = new odex.Solver(3);
+  let flow = [];
+
+  for (let i = 0; i < n; i++) {
+    [x, y, z] = s.solve(F, 0, [x, y, z], 0.01).y;
+    flow.push({ n: i, x: x, y: y, z: z });
+  }
+  return flow;
+}
+
+lorenzData = lorenz([1, 1, 1], 4000)
+
+odex = import("https://cdn.skypack.dev/odex");
+
+n = {
+  let i = 0;
+  while (i < 4000) {
+    yield Promises.delay(10, ++i);
+  }
+}
+```

@@ -1,0 +1,130 @@
+---
+title-block-banner: order.svg
+title: Quantile-Quantile Plots
+subtitle: Visualization builds intuitions -- math makes them concrete
+author: Sushovan Majhi
+date: today
+section-divs: true
+citation: 
+  url: https://smajhi.com/tutorials/data-science/qq
+bibliography: references.bib
+code-fold: false
+execute: 
+  echo: false
+image: order.png
+---
+Quantile-Quantile plot (also known as Q-Q plot) is an extremely useful visual tool for exploratory data analysis (EDA). A Q-Q plot is not particularly a summary of data, rather an *informal* assessment of [goodness of fit](https://en.wikipedia.org/wiki/Goodness_of_fit) to discern the disparity of two distributions. Quantiles from one distribution (usually from data) is plotted against those of another distribution (usually a theoretical, known model). For more examples and discussions, see [@wilk68].
+
+# Quantiles
+Since the concept of a Q-Q plot is based on quantiles. We begin with the definition of quantiles of a probability distribution.
+
+## Theoretical Quantiles
+
+::: {#def-quantile}
+## Theoretical Quantiles
+For any $p\in[0,1]$, a $p$th **quantile** of a random variable $X$ is defined to be that value $x_p\in\mathbb R$ such that $\mathbb P(X\leq x_p)=p$.
+:::
+In other words, the probability that $X$ realizes a value not greater than a $p$th quantile is $p$. For $p=\frac{1}{2}$, $x_p$ is commonly known as **median** of $X$. If $F(x)$ denotes the CDF of $X$, one notes that $x_p=F^{-1}(p)$, provided the CDF $F(x)$ is *invertible*^[A function $f:A\to B$ is called invertible near a point $x_0\in A$ if there is an interval $I$ containing the point $x_0$ such that $f$ is a bijective map when restricted on $I$.] near $x_p$.
+
+:::{.callout-warning}
+## Quantiles are not unique
+In general, quantiles are not unique. Easy examples can be found when $X$
+is discrete. For an example on the continuous side, take $X\sim\mathrm{unif}([0,1])$ to see that any number not less than $1$ is a $p$th quantile for $p=1$. See 
+the CDF of $X$ below to convince yourself.
+:::
+
+```{ojs}
+//| layout-ncol: 2
+//| fig-cap: The density (left) and cumulative distribution (right) functions of uniform $[0,1]$ are shown by the blue lines. The CDF is only invertible on the support.
+//| fig-subcap: 
+//|   - PDF
+//|   - CDF
+Plot.plot({
+grid: true,
+y: {  ticks: 5 },
+x: { ticks: 3 },
+style: { fontSize: '1.2rem' },
+marks: [
+Plot.line([[-1, 0],[0, 0]], { stroke: 'steelblue', strokeWidth: 3 }),
+Plot.line([[0, 1],[1, 1]], { stroke: 'steelblue', strokeWidth: 3 }),
+Plot.line([[1, 0],[2, 0]], { stroke: 'steelblue', strokeWidth: 3 }),
+]
+})
+Plot.line([[-1, 0],[0, 0],[1, 1], [2, 1]], { stroke: 'steelblue', strokeWidth: 3 }).plot({
+grid: true,
+y: {  ticks: 5 },
+x: { ticks: 3 },
+style: { fontSize: '1.4rem' }
+})
+```
+
+
+Moving forward, we assume that the $X$ is a continuous random variables and that
+its CDF $F$ is a strictly increasing, continuous function, at least on an interval of the real line. As a consequence, the CDF is invertible everywhere and the $p$th quantile $x_p=F^{-1}(p)$ is uniquely defined. Examples of such distributions include the  [exponential](https://en.wikipedia.org/wiki/Exponential_distribution), [$\chi^2$](https://en.wikipedia.org/wiki/Chi-squared_distribution)- and [F](https://en.wikipedia.org/wiki/F-distribution)-distribution on $(0,\infty)$, [normal](https://en.wikipedia.org/wiki/Normal_distribution) and [Student's t](https://en.wikipedia.org/wiki/Student%27s_t-distribution)-distribution on $\mathbb R$, the [Beta](https://en.wikipedia.org/wiki/Beta_distribution) distribution on $(0,1)$, etc. 
+
+:::{#exr-1}
+Find a continuous distribution with the expected value $0$ and whose CDF is only intertible on a **bounded** interval of the real line.
+:::
+
+## Observed Quantiles
+While the quantiles of a probability distribution can be concretely defined (@def-quantile), there have been quite a few conventions for the assignment of quantiles for a batch of observations or a dataset. Although, for a large sample they make little to no difference for a descriptive analysis. We use the following convention:
+
+For a random sample $X_1, X_2, \ldots, X_n$ of size $n$, the [order statistics](./order-statistics.qmd) are denoted by $X_{(1)}\leq X_{(2)}\leq\ldots\leq X_{(n)}$. And, the $k/(n+1)$ quantile of data is assigned to $X_{(k)}$, the $k$th-order statistic.
+
+
+# Plotting and Studying Q-Q Plots
+
+## Observed vs Theoretical Quantiles
+ Let us consider a sample of $n$ from a uniform distribution from $[0,1]$. As proved in 
+
+### Testing Uniform Random Generator
+```{ojs}
+viewof n = Inputs.range([30,100],{ step: 1, label: 'sample size' })
+Plot.plot({
+  style: {  },
+  grid: true,
+  x: { label: `uniform quantiles →`, line: true },
+  y: { label: `↑ observed quantiles`, line: true },
+  marks: [
+    Plot.link({length: 1}, {
+      x1: 0,
+      x2: 1,
+      y1: 0,
+      y2: 1,
+    }),
+    Plot.dot({length: n}, {
+      x: d3.range(n).map(i => (i+1)/(n+1)),
+      y: d3.sort( Array.from({length: n}, d3.randomUniform()) )
+    }),
+  ]
+})
+```
+
+## Two Observed Batches 
+```{ojs}
+data = await FileAttachment('Bjerkdahl.csv').csv({ typed: true });
+dataA = data.filter( d => d.Treatment === 'III' ).map( d => d.X ).sort( (a, b) => a - b);
+dataB = data.filter( d => d.Treatment === 'V' ).map( d => d.X ).sort( (a, b) => a - b);
+Plot.plot({
+  x: {
+    label: 'Quantiles of Group A'
+  },
+  y: {
+    label: 'Quantiles of Group B'
+  },
+  width: 500,
+  marks: [
+    Plot.dot(dataB.map( (q, i) => [ q, dataA[i] ] ), { fill: 'steelblue' }),
+    Plot.ruleX([0]),
+    Plot.ruleY([0]),
+    Plot.line([[0,0], [500, 500]], { stroke: 'gray' })
+  ], 
+})
+```
+
+
+# Conclusion
+
+# References
+:::{#refs}
+:::

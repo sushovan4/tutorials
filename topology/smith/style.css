@@ -1,0 +1,24 @@
+blockquote {
+  background: #fcfff5;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #a3c293; 
+  margin-left: 0;
+}
+.mat-container {
+  margin: auto;
+}
+.element {
+  background: #eee;
+  width: 60px;
+  min-height: 60px;
+  padding: 5px;
+  margin: 2px;
+  text-align: center;
+  border-radius: 5px;
+  display: inline-block;
+  border: 2px solid white;
+  font-size: 15px;
+  line-height: 60px;
+  overflow: hidden;
+}

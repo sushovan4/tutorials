@@ -1,0 +1,37 @@
+project:
+  type: website
+
+  
+website:
+  repo-url: https://github.com/sushovan4/sushovan4.github.io
+  repo-actions: [edit, issue]
+  logo: assets/favicon.png
+  page-navigation: true
+  reader-mode: true
+    
+  navbar:
+    background: dark
+    left:
+      - href: https://www.smajhi.com
+        text: Home
+      - href: index.qmd
+    
+  page-footer: 
+    right: "© 2021 Sushovan Majhi 〈sush@smajhi.com〉"
+    border: true
+    background: dark
+
+format:
+  html:
+    theme: 
+      light: journal
+      dark: darkly
+    css: 
+      - css/styles.css
+    code-fold: true
+    toc: true
+    code-copy: hover
+    highlight-style: breeze
+    code-link: true
+
+

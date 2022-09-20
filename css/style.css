@@ -1,0 +1,423 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@700&display=swap');
+@import url('https://fonts.maateen.me/bangla/font.css');
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+section {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+#search-input {
+    background: transparent;
+    outline: none;
+    border: none;
+    font-size: 3em;
+    font-family: inherit;
+    border-bottom: 3px solid gray;
+    width: 100%;
+    padding: 7px;
+    color: gray;
+    transition: 0.5s;
+}
+
+#search-input:focus {
+    color: black;
+    border-width: 3px;
+    border-color: black;
+}
+
+#search-container .item {
+    color: black;
+    padding: 20px;
+    border-bottom: 1px dashed lightgray;
+}
+#search-container .item .title {
+    margin-top: 15px;
+    color: black;
+    font-weight: bold;
+    font-size: 2em;
+    transition: 0.3s;
+}
+
+#search-container .item:hover .title {
+    color:  #007bff;
+}
+
+img {
+    max-width: 100%;
+}
+
+.cards {
+    display: table;
+}
+.two.cards > .card {
+    float: left;
+    width: 45%;
+}
+
+.card {
+    display: flex;
+    text-decoration: none;
+    border: 1px solid rgba(34, 36, 38, .15);
+    -webkit-box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
+    box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
+    margin: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.card .avatar {
+    padding: 5px;
+    flex: 0 0 20%;
+}
+.card .avatar img {
+   width: 100%;
+   vertical-align: middle;
+}
+.card .content {
+    padding: 7px;
+}
+.card .content .title {
+    transition: 0.3s;
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 1.3em;
+    font-family: 'Alegreya Sans SC', sans-serif, 'Bangla', Arial, sans-serif;
+}
+
+:hover.card .content .title {
+    color: #007bff;
+}
+
+.card .description {
+    background-color: #eee;
+    padding: 7px;
+}
+
+.card:hover {
+    box-shadow: 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
+    -webkit-box-shadow: 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
+}
+
+html,
+body {
+    font-family: 'Josefin Sans', sans-serif, 'Bangla', Arial, sans-serif!important;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    min-height: 100vh;
+}
+
+body {
+    position: relative;
+    padding-bottom: 220px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Alegreya Sans SC', sans-serif, 'Bangla', Arial, sans-serif;
+}
+
+p.relaxed {
+    font-size: 1.2em;
+    word-spacing: 2px;
+    line-height: 25px;
+    text-align: justify;
+    padding: 7px;
+}
+
+.header {
+    background-color: #282828;
+    color: white;
+    padding: 10px;
+    padding-left: 25px;
+    font-size: 1.7em;
+}
+
+.menu {
+    background-color: #282828;
+}
+
+.menu .main {
+    padding: 10px;
+    padding-left: 25px;
+    position: relative;
+}
+
+.menu .main .item {
+    font-size: 1em;
+    display: inline-block;
+    color: rgba(255, 255, 255, .5);
+    padding: 10px;
+    text-decoration: none;
+    margin-left: 10px;
+    transition: 0.5s;
+}
+
+.menu .main .active.item,
+.menu .main .item:hover {
+    color: white;
+}
+
+.menu .main .right {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+}
+
+.menu .collapsed {
+    display: none;
+}
+
+.menu .collapsed .item {
+    display: block;
+    text-align: center;
+    font-size: 1.2em;
+    color: rgba(255, 255, 255, .5);
+    padding: 10px;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
+.menu .collapsed .active.item,
+.menu .collapsed .item:hover {
+    background-color: #eee;
+    color: black;
+}
+
+.search.item {
+    border: 1px solid white;
+    color: white;
+    border-radius: 25px;
+}
+
+.search.item input,
+.collapsed .search input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-family: inherit;
+    color: lawngreen;
+}
+
+.search.item .submit,
+.collapsed .search .submit {
+    color: lawngreen;
+    cursor: pointer;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.collapsed .search {
+    color: white;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(48, 45, 45);
+}
+
+.collapsed .search input {
+    width: 40%;
+    border-bottom: 1px solid white;
+    height: 30px;
+}
+
+.container {
+    margin: auto;
+    max-width: 720px;
+}
+
+.footer {
+    padding: 15px;
+    color: white;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    height: 100px;
+    background-color: #282828;
+}
+
+.social-container {
+    display: flex;
+}
+
+.social {
+    color: #282828;
+    text-align: center;
+    margin: 10px;
+    transition: color 0.3s;
+}
+
+.social h4 {
+    margin-top: 2px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    font-family: 'Josefin Sans', sans-serif, 'Bangla', Arial, sans-serif;
+    border-radius: 3px;
+    border: 1px solid grey;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    color: white;
+}
+
+.timeline {
+    margin-left: 15px;
+}
+.timeline .item {
+    list-style: none;
+    border-left: 2px dashed lightgray;
+    position: relative;
+    padding: 15px;
+    padding-left: 20px;
+    border-bottom: 0.5px dashed lightgray;
+}
+
+.timeline .item:last-child {
+    border-bottom: none;
+}
+
+.timeline .year {
+    color: white;
+    font-size: 17px;
+    position: relative;
+    padding: 5px;
+    background-color: #282828;
+    height: 16px;
+    position: absolute;
+    transform: rotate(-90deg);
+    left: -24px;
+    top: 30px;
+}
+
+.reflinks a {
+    color: red;
+    font-family: monospace;
+    font-size: 0.8em;
+    text-decoration: underline;
+}
+
+.cite {
+    cursor: pointer;
+    text-decoration: underline;
+    color: red;
+}
+
+.disabled {
+    color: grey;
+}
+
+cite {
+    font-style: normal;
+    color: red;
+}
+
+.ref {
+    font-size: 1.2em;
+}
+
+.ref .column:first-child {
+    color: red
+}
+
+.mobile {
+    display: none!important;
+}
+
+#bio {
+    font-family: 'Source Code Pro', monospace!important;
+    font-size: 18px;
+}
+
+#bio::after {
+    content: "";
+    margin-left: 5px;
+    border: 3px solid rgba(0, 255, 0, 0.95);
+    animation: animated-cursor 600ms steps(29, end) infinite;
+}
+
+@keyframes animated-cursor {
+    from {
+        border-color: rgba(0, 255, 0, .95);
+    }
+    to {
+        border-color: transparent;
+    }
+}
+
+a.styled {
+    margin: 2px;
+    border-radius: 3px;
+    padding: 2px;
+    display: inline-block;
+    color: #21ba45;
+    border-width: 0;
+}
+
+a.styled::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #21ba45;
+    transition: width 0.3s;
+}
+
+a.styled:hover::after {
+    width: 100%;
+}
+
+p.post {
+    font-size: 32px;
+}
+
+@media only screen and (max-width: 700px) {
+    .menu .main {
+        padding-left: 10px;
+    }
+    .laptop {
+        display: none!important;
+    }
+    .mobile {
+        display: initial!important;
+    }
+}

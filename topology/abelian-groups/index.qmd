@@ -1,0 +1,149 @@
+---
+title: Finitely-Generated Free Abelian Groups
+subtitle: An Interactive Primer on Homomomorphisms between Free Abelian Groups
+title-block-banner: drawing.svg
+title-block-banner-color: white
+date: 07-26-2021
+author: Sushovan Majhi
+code-fold: false
+execute: 
+  echo: false
+categories: 
+  - Algebraic Topology
+  - Interactive Tutorial
+image: thumb.png
+---
+Let $(G,+)$ and $(G',+)$ be finitely-generated free (additive) abelian groups of dimension $m$ and $n$, respectively. We choose arbitrary *ordered* bases $\mathcal{E}=(e_1,e_2,\ldots,e_m)$ and $\mathcal{E}'=(e_1',e_2',\ldots,e_n')$ for $G$ and $G'$, respectively.
+
+## Matrix of A Homomorphism
+A homomorphism $F:G\to G'$ is a linear function, i.e., $F(x+y)=F(x)+F(y)$ for all $x,y\in G$.
+
+As a consequence, $F$ is uniquely determined by its values on the elements of $\mathcal{E}$. For each $1\leq j\leq m$, the image $F(e_j)$ can be written *uniquely* as a (formal) linear combination of the elements of $\mathcal{E}'$. Let 
+$$
+F(e_j) = \sum\limits_{i=1}^{n} a_{ij}e_i'.
+$$
+
+The matrix $A:=\{a_{ij}\}\in\mathcal{M}_{n,m}(\mathbb Z)$ is called the matrix of $F$ w.r.t. the (ordered) bases $\mathcal{E},\mathcal{E}'$, and is denoted by $[F]_{\mathcal{E},\mathcal{E'}}$. In matrix notation, we have 
+$$
+\bigg[F(e_1),\ldots,F(e_j),\ldots,F(e_m)\bigg]=
+\bigg[e_1',\ldots,e_i',\ldots,e_n'\bigg]
+\begin{bmatrix}
+a_{11} & \ldots & a_{1j} & \ldots & a_{1m} \\
+\ldots & \ldots & \ldots & \ldots & \ldots \\
+a_{i1} & \ldots & a_{ij} & \ldots & a_{im} \\
+\ldots & \ldots & \ldots & \ldots & \ldots \\
+a_{n1} & \ldots & a_{nj} & \ldots & a_{nm} \\
+\end{bmatrix}.
+$$
+Tolerating a mild abuse of notation, we can also express the above relation as 
+$F(\mathcal{E})=\mathcal{E'}[F]_{\mathcal{E},\mathcal{E'}}$.
+
+### Example:
+Let $F:\mathbb{Z}^3\to \mathbb{Z}^2$ be a homomorphism defined by 
+$$F(a,b,c)=(3a+4b-2c,2b+5c).$$
+
+A natural choice of ordered bases is $\mathcal{E}=\bigg((1,0,0),(0,1,0),(0,0,1)\bigg)$ and $\mathcal{E}'=\bigg((1,0),(0,1)\bigg)$. In order to compute $[F]_{\mathcal{E},\mathcal{E}''}$, the matrix of $F$ w.r.t. the chosen bases, we note that
+$$
+\begin{aligned}
+F(1,0,0) &= (3,0) = 3(1,0) + 0(0,1) \\
+F(0,1,0) &= (4,2) = 4(1,0) + 2(0,1) \\
+F(0,0,1) &= (-2,5) = -2(1,0) + 5(0,1)
+\end{aligned}
+$$
+So, the matrix of $F$ is
+$$
+\begin{bmatrix}
+3 & 4 & -2\\
+0 & 2 & 5
+\end{bmatrix}.
+$$
+
+**Question** What would the matrix of $F$ be if we chose the bases $\bigg((1,1,0),(1,0,1),(0,1,1)\bigg)$ and $\bigg((1,0),(1,1)\bigg)$?  
+
+> Following the technique (basically the definition) of the above example we can compute the matrix of $F$ under the new set of bases. 
+
+## Change of Basis
+Let $\mathcal{B}=(e_1,e_2,\ldots,e_m)$ be an ordered basis of a finitely-generated free abelian group $G$. Now we consider an *new* basis $\mathcal{C}=(f_1,f_2,\ldots,f_m)$ of $G$. The *basechange matrix* encodes the change the basis from (*old*) $\mathcal{B}$ to (*new*) $\mathcal{C}$. The basechange matrix facilitates the computation of the matrix of a homomomorphism w.r.t. a set of new bases.
+
+The starting point is to write the elements of the new basis as a linear combination of those of the old basis. For $j=1,2,\ldots,m'$,
+$$
+f_j = \sum\limits_{i=1}^{m} p_{ij}e_i.
+$$
+
+The matrix $P$ is called the basechange matrix the order bases $\mathcal{B}\text{ and }\mathcal{C}$. In matrix notation,
+$$\mathcal{C}=\mathcal{B}P.$$
+
+As we can immediately see, the basechange matrix is unique, and it is also invertible [artin], i.e., $P\in GL_{m}(\mathbb Z)$. Given an invertible, integer matrix, one can also use the above matrix relation to compute the new basis.
+
+### Example:
+For this example, I let you interact with the tutorial. We choose the dimension of $G$ using the following slider. Upon choosing a value, you readily see the initial basis: 
+```{ojs}
+tex`\mathcal{B}=${nf.vec2Tex(B)}`
+```
+and randomly generated basechange matrix $P$.
+
+```{ojs}
+viewof m = Inputs.range([1, 6], {
+  value: 3,
+  step: 1,
+  label: "Dimension (m):"
+})
+```
+
+Now, we take a *random* invertible matrix of the chosen dimension:
+```{ojs}
+tex.block`P=${nf.mat2Tex(P)}.`
+```
+
+The new basis of $G$ is:
+```{ojs}
+tex.block`\mathcal{C}=${nf.vec2Tex(nf.changeBasis(B,P))}.`
+```
+
+### Application to Homomorphisms 
+Let $F:G\to G'$ be a homomorphism. Let $A$ denote the matrix of $F$ w.r.t. a pair of *old* ordered bases $(\mathcal{B},\mathcal{B}')$ for $G$ and $G'$, respectively. If a *new* pair of order bases $(\mathcal{C},\mathcal{C}')$ chosen, one would be interested to compute the matrix of $F$ w.r.t. the new bases. 
+
+Let $P\in\mathcal{M}_m(\mathbb Z)$ and $Q\in\mathcal{M}_n(\mathbb Z)$ denote the basechange matrices for $G$ and $G'$, respectively. So,
+$$\mathcal{C}=\mathcal{B}P\text{, and }\mathcal{C}'=\mathcal{B}'Q.$$
+
+By the definition of $A$, note that
+$F(\mathcal{B})=\mathcal{B}'A$. Therefore,
+$$
+\begin{aligned}
+F(\mathcal{B})P &=(\mathcal{B}'A)P \\
+&= (\mathcal{C}'Q^{-1})AP \\
+&= \mathcal{C}'(Q^{-1}AP)
+\end{aligned}
+$$
+
+Using the fact that $F$ is a homomomorphism and letting $\mathcal{B}=(e_1,e_2,\ldots,e_m)$ and $\mathcal{C}=(f_1,f_2,\ldots,f_m)$, we simplify the LHS.
+$$
+\begin{aligned}
+F(\mathcal{B})P &= \big[F(e_1),\ldots,F(e_j),\ldots,F(e_m)\big]P \\
+&= \left[\sum_{j=1}^mF(e_j)p_{1j},\ldots,\sum_{j=1}^mF(e_j)p_{mj}\right] \\
+&= \left[F\left(\sum_{j=1}^m p_{1j}e_j\right),\ldots,F\left(\sum_{j=1}^m p_{1j}e_j\right)\right] \\
+&= \left[F\left(f_1\right),\ldots,F\left(f_m\right)\right] \\
+&= F(\mathcal{C}).
+\end{aligned}
+$$
+
+Therefore, 
+$$F(\mathcal{C})=\mathcal{C}'\left(Q^{-1}AP\right).$$
+
+We conclude that $\left(Q^{-1}AP\right)$ is the matrix of $F$ w.r.t. the new pair of basis $(\mathcal{C},\mathcal{C}')$.
+
+
+```{ojs}
+nf = require("https://bundle.run/@tdajs/normal-form@2.1.0")
+B = d3.range(0, m).map((e) => "e_" + (e + 1))
+P = {
+  let P = [];
+  do {
+    P = d3.range(0, m).map((row) => {
+      return d3.range(0, m).map((elm) => d3.randomInt(-5, 5)());
+    });
+  } while (new nf.NormalForm(P).D.includes(0));
+
+  return P;
+}
+```
