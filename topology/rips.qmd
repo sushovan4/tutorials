@@ -7,7 +7,6 @@ categories:
     - Interactive Tutorial
 date: today
 author: Sushovan Majhi
-date: today
 title-block-banner: abelian-groups/drawing.svg
 title-block-banner-color: white
 image: abelian-groups/thumb.png

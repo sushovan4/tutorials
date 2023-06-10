@@ -33,3 +33,6 @@ format:
     code-copy: hover
     highlight-style: breeze
     code-link: true
+  
+execute: 
+  freeze: auto
