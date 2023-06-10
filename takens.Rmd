@@ -1,0 +1,62 @@
+---
+title: "Taken's Embedding"
+author: "Sushovan Majhi"
+date: "`r Sys.Date()`"
+output: 
+  tufte::tufte_html:
+    toc: true
+    css: style.css
+  tufte::tufte_handout: default
+---
+
+```{r setup, echo=FALSE, message=FALSE}
+library(nonlinearTseries)
+```
+
+```{r takens, message=FALSE, warning=FALSE, echo=FALSE}
+t <- lorenz()
+plot(buildTakens(t$z, embedding.dim = 2, time.lag = 5), family = "Palatino", pch= 19, col = "red")
+```
+\newcommand{\eps}{\varepsilon}
+
+# Introduction
+
+
+
+It has been long known to physicists that the *state space* of a physical system can be best described as a topological manifold.
+
+```{r air-quality, echo=FALSE, out.width = '80%', fig.margin=TRUE}
+knitr::include_graphics("./pendulum.png", error = FALSE)
+```
+
+`r tufte::newthought("Here")` is what
+
+::: {.example name="Simple Pendulum"}
+The state of a simple pendulum, freely swinging under the gravitational force, can be completely described by the pair $(\theta,\dot{\theta})$, where $\theta$ is the angular displacement of the blob from its vertical position and $\dot{\theta}$ its angular velocity. In other words, knowing the numbers $\theta$ and $\dot{\theta}$ at a given time fully unravels the configuration or state of the pendulum at that particular moment of its motion. Also, knowing just one of them is not enough. If I showed you a picture of the pendulum clicked exactly when it was just vertical (i.e. $\theta=0$), you would not be able to tell whether it was swinging left-to-right or right-to-left when the snapshot was taken. So, it takes no less than two components to describe the state space. We call it a two-dimensional system.
+:::
+
+```{marginfigure}
+This theorem is not true in general.
+```
+
+:::{.definition name="Smooth Manifold"}
+A smooth manifold is    
+:::
+
+As you all know^[This is a footnote!]
+
+
+::: {.definition name="Diffeomorphism"}
+Let $M,N$ be smooth manifolds. A bijective map $f:M\to N$ is called a *diffeomorphism* if it is smooth, bijective, and its inverse is smooth. If there exists a diffeomorphism, the manifolds are called *diffeomorphic*.
+:::  
+
+:::{.definition name="Embedding"}
+A
+:::
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```

@@ -1,0 +1,12 @@
+---
+title: Confidence Intervals
+title-block-banner: true
+subtitle: Confidence Amidst Randomness
+code-fold: true
+execute: 
+  echo: false
+---
+
+```{ojs}
+d3.randomNormal()();
+```
